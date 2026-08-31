@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hisab Calculator – All-in-One Financial Calculator</title>
+    <meta name="description" content="Hisab Calculator - Free All-in-One Financial Dashboard featuring GST, EMI, FD, SIP, RD, Gratuity, and standard math calculators.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Chart.js for Visual Financial Summaries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation (Desktop & Tablet) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <div class="logo-text">
+                        <span class="brand-name">Hisab</span>
+                        <span class="brand-sub">Calculator</span>
+                    </div>
+                </div>
+                <button class="mobile-close-btn" id="mobileCloseBtn" aria-label="Close Navigation">&times;</button>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-group-title">CALCULATORS</div>
+                
+                <button class="nav-item active" data-tab="gst" id="nav-gst">
+                    <span class="nav-icon">🧾</span>
+                    <span class="nav-label">GST Calculator</span>
+                </button>
+                
+                <button class="nav-item" data-tab="emi" id="nav-emi">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-label">EMI Calculator</span>
+                </button>
+
+                <button class="nav-item" data-tab="fd" id="nav-fd">
+                    <span class="nav-icon">🏦</span>
+                    <span class="nav-label">FD Calculator</span>
+                </button>
+
+                <button class="nav-item" data-tab="sip" id="nav-sip">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-label">SIP Calculator</span>
+                </button>
+
+                <button class="nav-item" data-tab="rd" id="nav-rd">
+                    <span class="nav-icon">🔄</span>
+                    <span class="nav-label">RD Calculator</span>
+                </button>
+
+                <button class="nav-item" data-tab="gratuity" id="nav-gratuity">
+                    <span class="nav-icon">💼</span>
+                    <span class="nav-label">Gratuity Calculator</span>
+                </button>
+
+                <button class="nav-item" data-tab="normal" id="nav-normal">
+                    <span class="nav-icon">🔢</span>
+                    <span class="nav-label">Normal Calculator</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="currency-badge">
+                    <span class="badge-flag">🇮🇳</span>
+                    <span class="badge-text">INR (₹) Standard</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Open Menu">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                    </button>
+                    <div class="header-title">
+                        <h1 id="pageTitle">GST Calculator</h1>
+                        <p id="pageSubtitle">Calculate GST inclusive & exclusive amounts instantly</p>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <!-- Theme Toggle Switch -->
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme">
+                        <span class="theme-icon sun-icon">☀️</span>
+                        <span class="theme-icon moon-icon">🌙</span>
+                        <span class="theme-ball"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Calculator Views Container -->
+            <main class="content-body">
+
+                <!-- 1. GST CALCULATOR -->
+                <section class="calculator-panel active" id="panel-gst">
+                    <div class="calc-grid">
+                        <!-- Inputs Card -->
+                        <div class="card form-card">
+                            <div class="card-header">
+                                <h2>Enter Parameters</h2>
+                                <button class="reset-btn" id="gst-reset" title="Reset fields">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                    Reset
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gst-amount">Amount (₹)</label>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">₹</span>
+                                    <input type="number" id="gst-amount" placeholder="e.g. 10000" min="0" step="any" value="10000">
+                                </div>
+                                <span class="error-msg" id="gst-amount-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>GST Mode</label>
+                                <div class="segmented-control">
+                                    <input type="radio" name="gst-mode" id="gst-add" value="add" checked>
+                                    <label for="gst-add">Add GST (Exclusive)</label>
+                                    
+                                    <input type="radio" name="gst-mode" id="gst-remove" value="remove">
+                                    <label for="gst-remove">Remove GST (Inclusive)</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>GST Rate (%)</label>
+                                <div class="rate-chips" id="gst-rate-chips">
+                                    <button type="button" class="chip-btn" data-rate="5">5%</button>
+                                    <button type="button" class="chip-btn" data-rate="12">12%</button>
+                                    <button type="button" class="chip-btn active" data-rate="18">18%</button>
+                                    <button type="button" class="chip-btn" data-rate="28">28%</button>
+                                </div>
+                                <div class="custom-rate-wrap">
+                                    <label for="gst-custom-rate">Custom Rate (%):</label>
+                                    <input type="number" id="gst-custom-rate" placeholder="Custom %" min="0" max="100" step="0.1" value="18">
+                                </div>
+                            </div>
+
+                            <button class="primary-btn" id="gst-calculate-btn">
+                                <span>Calculate GST</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Results Card -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <h2>Calculation Breakdown</h2>
+                                <button class="copy-btn" id="gst-copy" title="Copy summary">📋 Copy</button>
+                            </div>
+
+                            <div class="result-highlight">
+                                <span class="result-label">Final Total Amount</span>
+                                <span class="result-value" id="gst-res-final">₹ 11,800.00</span>
+                            </div>
+
+                            <div class="result-rows">
+                                <div class="res-row">
+                                    <span class="res-label">Net / Base Amount</span>
+                                    <span class="res-val" id="gst-res-original">₹ 10,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">CGST (<span id="gst-cgst-rate">9</span>%)</span>
+                                    <span class="res-val highlight-sub" id="gst-res-cgst">₹ 900.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">SGST (<span id="gst-sgst-rate">9</span>%)</span>
+                                    <span class="res-val highlight-sub" id="gst-res-sgst">₹ 900.00</span>
+                                </div>
+                                <div class="res-row total-tax-row">
+                                    <span class="res-label">Total GST Tax Amount</span>
+                                    <span class="res-val tax-val" id="gst-res-tax">₹ 1,800.00</span>
+                                </div>
+                            </div>
+
+                            <div class="info-box">
+                                <p id="gst-explanation">For Exclusive mode: 18% GST (₹1,800) is added to base amount ₹10,000.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 2. EMI CALCULATOR -->
+                <section class="calculator-panel" id="panel-emi">
+                    <div class="calc-grid">
+                        <!-- Form Card -->
+                        <div class="card form-card">
+                            <div class="card-header">
+                                <h2>Loan Details</h2>
+                                <button class="reset-btn" id="emi-reset" title="Reset fields">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                    Reset
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="emi-amount">Loan Amount (₹)</label>
+                                    <span class="slider-val-badge" id="emi-amount-badge">₹ 5,00,000</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">₹</span>
+                                    <input type="number" id="emi-amount" min="1000" max="100000000" value="500000" step="5000">
+                                </div>
+                                <input type="range" class="range-slider" id="emi-amount-slider" min="10000" max="10000000" value="500000" step="10000">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="emi-rate">Interest Rate (% p.a.)</label>
+                                    <span class="slider-val-badge" id="emi-rate-badge">8.5%</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">%</span>
+                                    <input type="number" id="emi-rate" min="0.1" max="50" value="8.5" step="0.1">
+                                </div>
+                                <input type="range" class="range-slider" id="emi-rate-slider" min="1" max="30" value="8.5" step="0.1">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="emi-tenure">Loan Tenure</label>
+                                    <div class="unit-toggle">
+                                        <button type="button" class="unit-btn active" id="emi-unit-years" data-unit="years">Years</button>
+                                        <button type="button" class="unit-btn" id="emi-unit-months" data-unit="months">Months</button>
+                                    </div>
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="number" id="emi-tenure" min="1" max="40" value="5" step="1">
+                                    <span class="input-suffix" id="emi-tenure-suffix">Years</span>
+                                </div>
+                                <input type="range" class="range-slider" id="emi-tenure-slider" min="1" max="30" value="5" step="1">
+                            </div>
+
+                            <button class="primary-btn" id="emi-calculate-btn">
+                                <span>Calculate EMI</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Results & Chart Card -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <h2>Payment Summary</h2>
+                                <button class="copy-btn" id="emi-copy" title="Copy summary">📋 Copy</button>
+                            </div>
+
+                            <div class="result-highlight emi-highlight">
+                                <span class="result-label">Monthly EMI</span>
+                                <span class="result-value" id="emi-res-emi">₹ 10,258.00</span>
+                            </div>
+
+                            <div class="chart-section">
+                                <div class="chart-container">
+                                    <canvas id="emiChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="result-rows">
+                                <div class="res-row">
+                                    <span class="res-label">
+                                        <span class="legend-dot dot-principal"></span> Principal Amount
+                                    </span>
+                                    <span class="res-val" id="emi-res-principal">₹ 5,00,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">
+                                        <span class="legend-dot dot-interest"></span> Total Interest Payable
+                                    </span>
+                                    <span class="res-val interest-val" id="emi-res-interest">₹ 1,15,497.00</span>
+                                </div>
+                                <div class="res-row total-pay-row">
+                                    <span class="res-label">Total Amount Payable</span>
+                                    <span class="res-val" id="emi-res-total">₹ 6,15,497.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 3. FD CALCULATOR -->
+                <section class="calculator-panel" id="panel-fd">
+                    <div class="calc-grid">
+                        <!-- Inputs Card -->
+                        <div class="card form-card">
+                            <div class="card-header">
+                                <h2>Fixed Deposit Details</h2>
+                                <button class="reset-btn" id="fd-reset" title="Reset fields">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                    Reset
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="fd-amount">Total Investment Amount (₹)</label>
+                                    <span class="slider-val-badge" id="fd-amount-badge">₹ 1,00,000</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">₹</span>
+                                    <input type="number" id="fd-amount" min="1000" max="100000000" value="100000" step="5000">
+                                </div>
+                                <input type="range" class="range-slider" id="fd-amount-slider" min="5000" max="5000000" value="100000" step="5000">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="fd-rate">Interest Rate (% p.a.)</label>
+                                    <span class="slider-val-badge" id="fd-rate-badge">7.0%</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">%</span>
+                                    <input type="number" id="fd-rate" min="0.1" max="25" value="7.0" step="0.1">
+                                </div>
+                                <input type="range" class="range-slider" id="fd-rate-slider" min="1" max="15" value="7.0" step="0.1">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="fd-tenure">Deposit Tenure</label>
+                                    <div class="unit-toggle">
+                                        <button type="button" class="unit-btn active" id="fd-unit-years" data-unit="years">Years</button>
+                                        <button type="button" class="unit-btn" id="fd-unit-months" data-unit="months">Months</button>
+                                    </div>
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="number" id="fd-tenure" min="1" max="25" value="3" step="1">
+                                    <span class="input-suffix" id="fd-tenure-suffix">Years</span>
+                                </div>
+                                <input type="range" class="range-slider" id="fd-tenure-slider" min="1" max="20" value="3" step="1">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fd-freq">Compounding Frequency</label>
+                                <select id="fd-freq" class="custom-select">
+                                    <option value="4" selected>Quarterly (Compounded every 3 months)</option>
+                                    <option value="12">Monthly (Compounded every month)</option>
+                                    <option value="2">Half-Yearly (Compounded every 6 months)</option>
+                                    <option value="1">Yearly (Compounded annually)</option>
+                                </select>
+                            </div>
+
+                            <button class="primary-btn" id="fd-calculate-btn">
+                                <span>Calculate Maturity</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Results & Chart Card -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <h2>FD Maturity Summary</h2>
+                                <button class="copy-btn" id="fd-copy" title="Copy summary">📋 Copy</button>
+                            </div>
+
+                            <div class="result-highlight fd-highlight">
+                                <span class="result-label">Total Maturity Amount</span>
+                                <span class="result-value" id="fd-res-maturity">₹ 1,23,144.00</span>
+                            </div>
+
+                            <div class="chart-section">
+                                <div class="chart-container">
+                                    <canvas id="fdChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="result-rows">
+                                <div class="res-row">
+                                    <span class="res-label">
+                                        <span class="legend-dot dot-principal"></span> Principal Amount
+                                    </span>
+                                    <span class="res-val" id="fd-res-principal">₹ 1,00,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">
+                                        <span class="legend-dot dot-growth"></span> Total Interest Earned
+                                    </span>
+                                    <span class="res-val growth-val" id="fd-res-interest">₹ 23,144.00</span>
+                                </div>
+                                <div class="res-row total-pay-row">
+                                    <span class="res-label">Maturity Value</span>
+                                    <span class="res-val" id="fd-res-total">₹ 1,23,144.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 4. SIP CALCULATOR -->
+                <section class="calculator-panel" id="panel-sip">
+                    <div class="calc-grid">
+                        <!-- Inputs Card -->
+                        <div class="card form-card">
+                            <div class="card-header">
+                                <h2>SIP Investment Details</h2>
+                                <button class="reset-btn" id="sip-reset" title="Reset fields">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                    Reset
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="sip-amount">Monthly Investment (₹)</label>
+                                    <span class="slider-val-badge" id="sip-amount-badge">₹ 5,000</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">₹</span>
+                                    <input type="number" id="sip-amount" min="500" max="10000000" value="5000" step="500">
+                                </div>
+                                <input type="range" class="range-slider" id="sip-amount-slider" min="500" max="100000" value="5000" step="500">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="sip-rate">Expected Annual Return (%)</label>
+                                    <span class="slider-val-badge" id="sip-rate-badge">12.0%</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">%</span>
+                                    <input type="number" id="sip-rate" min="1" max="35" value="12.0" step="0.5">
+                                </div>
+                                <input type="range" class="range-slider" id="sip-rate-slider" min="1" max="30" value="12.0" step="0.5">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="sip-tenure">Investment Duration (Years)</label>
+                                    <span class="slider-val-badge" id="sip-tenure-badge">10 Years</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="number" id="sip-tenure" min="1" max="40" value="10" step="1">
+                                    <span class="input-suffix">Years</span>
+                                </div>
+                                <input type="range" class="range-slider" id="sip-tenure-slider" min="1" max="40" value="10" step="1">
+                            </div>
+
+                            <!-- Step-Up SIP Optional Box -->
+                            <div class="stepup-box">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="sip-stepup-toggle">
+                                    <label for="sip-stepup-toggle">Annual Step-up SIP (Optional)</label>
+                                </div>
+                                <div class="stepup-input-wrap" id="sip-stepup-container" style="display: none;">
+                                    <label for="sip-stepup-percent">Annual Increase (% per year):</label>
+                                    <div class="input-wrapper">
+                                        <input type="number" id="sip-stepup-percent" min="1" max="50" value="10" step="1">
+                                        <span class="input-suffix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="primary-btn" id="sip-calculate-btn">
+                                <span>Calculate Returns</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Results & Chart Card -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <h2>Wealth Projection Summary</h2>
+                                <button class="copy-btn" id="sip-copy" title="Copy summary">📋 Copy</button>
+                            </div>
+
+                            <div class="result-highlight sip-highlight">
+                                <span class="result-label">Final Investment Value</span>
+                                <span class="result-value" id="sip-res-final">₹ 11,61,695.00</span>
+                            </div>
+
+                            <div class="chart-section">
+                                <div class="chart-container">
+                                    <canvas id="sipChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="result-rows">
+                                <div class="res-row">
+                                    <span class="res-label">
+                                        <span class="legend-dot dot-principal"></span> Total Invested Amount
+                                    </span>
+                                    <span class="res-val" id="sip-res-invested">₹ 6,00,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">
+                                        <span class="legend-dot dot-growth"></span> Estimated Returns
+                                    </span>
+                                    <span class="res-val growth-val" id="sip-res-returns">₹ 5,61,695.00</span>
+                                </div>
+                                <div class="res-row total-pay-row">
+                                    <span class="res-label">Total Portfolio Value</span>
+                                    <span class="res-val" id="sip-res-total">₹ 11,61,695.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 5. RD CALCULATOR -->
+                <section class="calculator-panel" id="panel-rd">
+                    <div class="calc-grid">
+                        <!-- Form Card -->
+                        <div class="card form-card">
+                            <div class="card-header">
+                                <h2>Recurring Deposit Details</h2>
+                                <button class="reset-btn" id="rd-reset" title="Reset fields">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                    Reset
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="rd-amount">Monthly Deposit Amount (₹)</label>
+                                    <span class="slider-val-badge" id="rd-amount-badge">₹ 5,000</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">₹</span>
+                                    <input type="number" id="rd-amount" min="500" max="5000000" value="5000" step="500">
+                                </div>
+                                <input type="range" class="range-slider" id="rd-amount-slider" min="500" max="100000" value="5000" step="500">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="rd-rate">Annual Interest Rate (%)</label>
+                                    <span class="slider-val-badge" id="rd-rate-badge">7.5%</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">%</span>
+                                    <input type="number" id="rd-rate" min="0.1" max="25" value="7.5" step="0.1">
+                                </div>
+                                <input type="range" class="range-slider" id="rd-rate-slider" min="1" max="15" value="7.5" step="0.1">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="rd-tenure">Deposit Tenure</label>
+                                    <div class="unit-toggle">
+                                        <button type="button" class="unit-btn" id="rd-unit-years" data-unit="years">Years</button>
+                                        <button type="button" class="unit-btn active" id="rd-unit-months" data-unit="months">Months</button>
+                                    </div>
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="number" id="rd-tenure" min="1" max="120" value="12" step="1">
+                                    <span class="input-suffix" id="rd-tenure-suffix">Months</span>
+                                </div>
+                                <input type="range" class="range-slider" id="rd-tenure-slider" min="1" max="120" value="12" step="1">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rd-freq">Compounding Frequency</label>
+                                <select id="rd-freq" class="custom-select">
+                                    <option value="4" selected>Quarterly (Compounded every 3 months)</option>
+                                    <option value="12">Monthly (Compounded every month)</option>
+                                    <option value="2">Half-Yearly (Compounded every 6 months)</option>
+                                    <option value="1">Yearly (Compounded annually)</option>
+                                </select>
+                            </div>
+
+                            <button class="primary-btn" id="rd-calculate-btn">
+                                <span>Calculate RD Maturity</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Results & Chart Card -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <h2>RD Maturity Summary</h2>
+                                <button class="copy-btn" id="rd-copy" title="Copy summary">📋 Copy</button>
+                            </div>
+
+                            <div class="result-highlight rd-highlight">
+                                <span class="result-label">Total Maturity Amount</span>
+                                <span class="result-value" id="rd-res-maturity">₹ 62,481.00</span>
+                            </div>
+
+                            <div class="chart-section">
+                                <div class="chart-container">
+                                    <canvas id="rdChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="result-rows">
+                                <div class="res-row">
+                                    <span class="res-label">
+                                        <span class="legend-dot dot-principal"></span> Total Deposited Amount
+                                    </span>
+                                    <span class="res-val" id="rd-res-deposited">₹ 60,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">
+                                        <span class="legend-dot dot-growth"></span> Estimated Interest Earned
+                                    </span>
+                                    <span class="res-val growth-val" id="rd-res-interest">₹ 2,481.00</span>
+                                </div>
+                                <div class="res-row total-pay-row">
+                                    <span class="res-label">Maturity Value</span>
+                                    <span class="res-val" id="rd-res-total">₹ 62,481.00</span>
+                                </div>
+                            </div>
+
+                            <div class="info-box">
+                                <p><strong>Disclaimer:</strong> This calculation is an estimate. Bank RD compounding algorithms may vary slightly based on exact quarterly calendar days and leap years.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 6. GRATUITY CALCULATOR -->
+                <section class="calculator-panel" id="panel-gratuity">
+                    <div class="calc-grid">
+                        <!-- Inputs Card -->
+                        <div class="card form-card">
+                            <div class="card-header">
+                                <h2>Salary & Employment Details</h2>
+                                <button class="reset-btn" id="gratuity-reset" title="Reset fields">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                    Reset
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gratuity-basic">Last Drawn Basic Salary (₹)</label>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">₹</span>
+                                    <input type="number" id="gratuity-basic" min="0" value="50000" step="1000">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gratuity-da">Dearness Allowance (DA) (₹)</label>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">₹</span>
+                                    <input type="number" id="gratuity-da" min="0" value="10000" step="1000">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="gratuity-years">Completed Years of Service</label>
+                                    <span class="slider-val-badge" id="gratuity-years-badge">15 Years</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="number" id="gratuity-years" min="1" max="50" value="15" step="1">
+                                    <span class="input-suffix">Years</span>
+                                </div>
+                                <input type="range" class="range-slider" id="gratuity-years-slider" min="1" max="50" value="15" step="1">
+                            </div>
+
+                            <button class="primary-btn" id="gratuity-calculate-btn">
+                                <span>Calculate Gratuity</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Results Card -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <h2>Gratuity Summary</h2>
+                                <button class="copy-btn" id="gratuity-copy" title="Copy summary">📋 Copy</button>
+                            </div>
+
+                            <div class="result-highlight gratuity-highlight">
+                                <span class="result-label">Estimated Gratuity Amount</span>
+                                <span class="result-value" id="gratuity-res-amount">₹ 5,19,231.00</span>
+                            </div>
+
+                            <div class="result-rows">
+                                <div class="res-row">
+                                    <span class="res-label">Basic Salary</span>
+                                    <span class="res-val" id="gratuity-res-basic">₹ 50,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">Dearness Allowance (DA)</span>
+                                    <span class="res-val" id="gratuity-res-da">₹ 10,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">Last Drawn Salary (Basic + DA)</span>
+                                    <span class="res-val highlight-sub" id="gratuity-res-last-salary">₹ 60,000.00</span>
+                                </div>
+                                <div class="res-row total-pay-row">
+                                    <span class="res-label">Tenure of Service</span>
+                                    <span class="res-val" id="gratuity-res-years">15 Years</span>
+                                </div>
+                            </div>
+
+                            <div class="info-box">
+                                <p id="gratuity-info-text">Formula: (Last Drawn Salary × 15 × Years of Service) ÷ 26.<br>Note: Continuous service of at least 5 years is mandatory for eligibility under the Payment of Gratuity Act 1972. Tax exemption limit is up to ₹20 Lakhs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 4. NORMAL CALCULATOR -->
+                <section class="calculator-panel" id="panel-normal">
+                    <div class="normal-calc-wrapper">
+                        <div class="card normal-calc-card">
+                            <div class="calc-screen">
+                                <div class="screen-history" id="calc-expression"></div>
+                                <div class="screen-current" id="calc-display">0</div>
+                            </div>
+
+                            <div class="calc-keypad">
+                                <button type="button" class="btn btn-action" data-action="clear">C</button>
+                                <button type="button" class="btn btn-action" data-action="delete">⌫</button>
+                                <button type="button" class="btn btn-action" data-action="percent">%</button>
+                                <button type="button" class="btn btn-operator" data-action="divide">÷</button>
+
+                                <button type="button" class="btn btn-digit" data-digit="7">7</button>
+                                <button type="button" class="btn btn-digit" data-digit="8">8</button>
+                                <button type="button" class="btn btn-digit" data-digit="9">9</button>
+                                <button type="button" class="btn btn-operator" data-action="multiply">×</button>
+
+                                <button type="button" class="btn btn-digit" data-digit="4">4</button>
+                                <button type="button" class="btn btn-digit" data-digit="5">5</button>
+                                <button type="button" class="btn btn-digit" data-digit="6">6</button>
+                                <button type="button" class="btn btn-operator" data-action="subtract">-</button>
+
+                                <button type="button" class="btn btn-digit" data-digit="1">1</button>
+                                <button type="button" class="btn btn-digit" data-digit="2">2</button>
+                                <button type="button" class="btn btn-digit" data-digit="3">3</button>
+                                <button type="button" class="btn btn-operator" data-action="add">+</button>
+
+                                <button type="button" class="btn btn-action" data-action="negate">±</button>
+                                <button type="button" class="btn btn-digit" data-digit="0">0</button>
+                                <button type="button" class="btn btn-digit" data-digit=".">.</button>
+                                <button type="button" class="btn btn-equals" data-action="equals">=</button>
+                            </div>
+                        </div>
+
+                        <div class="card key-tips-card">
+                            <h3>Keyboard Shortcuts</h3>
+                            <ul class="tips-list">
+                                <li><kbd>0</kbd> – <kbd>9</kbd> & <kbd>.</kbd> Enter numbers</li>
+                                <li><kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd> Basic math operators</li>
+                                <li><kbd>Enter</kbd> or <kbd>=</kbd> Calculate result</li>
+                                <li><kbd>Backspace</kbd> Delete last digit</li>
+                                <li><kbd>Esc</kbd> or <kbd>C</kbd> Clear screen</li>
+                                <li><kbd>%</kbd> Percentage</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">Summary copied to clipboard!</div>
+
+    <!-- Application Script -->
+    <script src="script.js"></script>
+</body>
+</html>

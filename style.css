@@ -1,0 +1,1158 @@
+/* ==========================================================================
+   Hisab Calculator - All-in-One Financial Calculator Styling
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Theme Variables & Reset
+   -------------------------------------------------------------------------- */
+:root {
+    --font-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Transition Speeds */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Light Theme Palette */
+    --bg-main: #f4f6fb;
+    --bg-sidebar: #ffffff;
+    --bg-header: rgba(255, 255, 255, 0.85);
+    --card-bg: #ffffff;
+    --card-border: rgba(226, 232, 240, 0.8);
+    
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+
+    --input-bg: #f8fafc;
+    --input-border: #cbd5e1;
+    --input-focus-border: #6366f1;
+    --input-focus-glow: rgba(99, 102, 241, 0.15);
+
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: rgba(79, 70, 229, 0.1);
+    
+    --accent-gst: #6366f1;
+    --accent-emi: #059669;
+    --accent-fd: #0284c7;
+    --accent-sip: #10b981;
+    --accent-rd: #8b5cf6;
+    --accent-gratuity: #ec4899;
+    --accent-normal: #d97706;
+
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+
+    --normal-calc-bg: #1e293b;
+    --normal-calc-screen: #0f172a;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme Palette */
+    --bg-main: #0b0f19;
+    --bg-sidebar: #111827;
+    --bg-header: rgba(17, 24, 39, 0.85);
+    --card-bg: #1f2937;
+    --card-border: rgba(255, 255, 255, 0.08);
+
+    --text-main: #f9fafb;
+    --text-muted: #9ca3af;
+    --text-light: #6b7280;
+
+    --input-bg: #111827;
+    --input-border: #374151;
+    --input-focus-border: #818cf8;
+    --input-focus-glow: rgba(129, 140, 248, 0.25);
+
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: rgba(99, 102, 241, 0.2);
+
+    --accent-gst: #818cf8;
+    --accent-emi: #10b981;
+    --accent-fd: #38bdf8;
+    --accent-normal: #fbbf24;
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+
+    --normal-calc-bg: #111827;
+    --normal-calc-screen: #030712;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-primary);
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* --------------------------------------------------------------------------
+   2. Layout Architecture
+   -------------------------------------------------------------------------- */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 270px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem 1rem;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    transition: transform var(--transition-normal), background-color var(--transition-normal);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.5rem 1.5rem 0.5rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    font-size: 1.75rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 8px rgba(99, 102, 241, 0.4));
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--text-main), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-sub {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.mobile-close-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 1.75rem;
+    cursor: pointer;
+}
+
+/* Nav Menu */
+.nav-menu {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+}
+
+.nav-group-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-light);
+    letter-spacing: 0.08em;
+    padding: 0 0.75rem 0.5rem 0.75rem;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--transition-fast);
+}
+
+.nav-item:hover {
+    background-color: var(--primary-light);
+    color: var(--text-main);
+    transform: translateX(3px);
+}
+
+.nav-item.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--card-border);
+}
+
+.currency-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--input-bg);
+    border: 1px solid var(--card-border);
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* Main Content Wrapper */
+.main-wrapper {
+    margin-left: 270px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: calc(100vw - 270px);
+}
+
+/* Header Bar */
+.top-header {
+    height: 75px;
+    background-color: var(--bg-header);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    transition: background-color var(--transition-normal);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mobile-toggle-btn {
+    display: none;
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+    padding: 0.4rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.header-title h1 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+}
+
+.header-title p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    width: 60px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
+    transition: all var(--transition-fast);
+}
+
+.theme-icon {
+    font-size: 0.9rem;
+    z-index: 1;
+}
+
+.theme-ball {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform var(--transition-normal);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .theme-ball {
+    transform: translateX(28px);
+}
+
+/* Content Body */
+.content-body {
+    padding: 2rem;
+    flex-grow: 1;
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Calculator Panels */
+.calculator-panel {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.calculator-panel.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Calc Grid Layout */
+.calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+}
+
+/* --------------------------------------------------------------------------
+   3. Card Components & Form Controls
+   -------------------------------------------------------------------------- */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-md);
+    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.card-header h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.reset-btn, .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: var(--input-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.reset-btn:hover, .copy-btn:hover {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1.35rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.label-with-val {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.slider-val-badge {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+}
+
+/* Input Fields */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-prefix, .input-suffix {
+    position: absolute;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.input-prefix {
+    left: 1rem;
+}
+
+.input-suffix {
+    right: 1rem;
+}
+
+input[type="number"], .custom-select {
+    width: 100%;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-main);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.input-wrapper input[type="number"] {
+    padding-left: 2.2rem;
+}
+
+.input-wrapper input[type="number"]:has(+ .input-suffix) {
+    padding-right: 4rem;
+}
+
+input[type="number"]:focus, .custom-select:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 3px var(--input-focus-glow);
+}
+
+.error-msg {
+    font-size: 0.75rem;
+    color: var(--danger);
+    margin-top: 0.35rem;
+    display: block;
+}
+
+/* Segmented Control Radio Buttons */
+.segmented-control {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: var(--input-bg);
+    border: 1px solid var(--card-border);
+    padding: 4px;
+    border-radius: var(--radius-md);
+    gap: 4px;
+}
+
+.segmented-control input[type="radio"] {
+    display: none;
+}
+
+.segmented-control label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin: 0;
+    transition: all var(--transition-fast);
+}
+
+.segmented-control input[type="radio"]:checked + label {
+    background-color: var(--card-bg);
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Rate Chips */
+.rate-chips {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.chip-btn {
+    padding: 0.6rem;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.chip-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.chip-btn.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+.custom-rate-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.custom-rate-wrap label {
+    font-size: 0.8rem;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.custom-rate-wrap input {
+    max-width: 140px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* Unit Toggle Buttons */
+.unit-toggle {
+    display: flex;
+    background-color: var(--input-bg);
+    border: 1px solid var(--card-border);
+    padding: 2px;
+    border-radius: var(--radius-sm);
+}
+
+.unit-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.unit-btn.active {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
+/* Range Sliders */
+.range-slider {
+    width: 100%;
+    margin-top: 0.75rem;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--input-border);
+    outline: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+    transition: transform var(--transition-fast);
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Primary Calculate Button */
+.primary-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.85rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    margin-top: 1rem;
+    transition: all var(--transition-fast);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+}
+
+.primary-btn:active {
+    transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   4. Results & Summary Display
+   -------------------------------------------------------------------------- */
+.result-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.result-highlight {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    text-align: center;
+}
+
+.emi-highlight {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.fd-highlight {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(2, 132, 199, 0.05));
+    border-color: rgba(56, 189, 248, 0.2);
+}
+
+.sip-highlight {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.04));
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+.rd-highlight {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.04));
+    border-color: rgba(139, 92, 246, 0.25);
+}
+
+.gratuity-highlight {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.12), rgba(236, 72, 153, 0.04));
+    border-color: rgba(236, 72, 153, 0.25);
+}
+
+/* Step-up Box Styling */
+.stepup-box {
+    background-color: var(--input-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    margin-bottom: 1.35rem;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.checkbox-wrapper label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    margin: 0;
+}
+
+.stepup-input-wrap {
+    margin-top: 0.85rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--card-border);
+}
+
+.stepup-input-wrap label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+    display: block;
+}
+
+.result-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.result-value {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--primary);
+    font-family: var(--font-mono);
+}
+
+.emi-highlight .result-value {
+    color: var(--accent-emi);
+}
+
+.fd-highlight .result-value {
+    color: var(--accent-fd);
+}
+
+.sip-highlight .result-value {
+    color: var(--accent-sip);
+}
+
+.rd-highlight .result-value {
+    color: var(--accent-rd);
+}
+
+.gratuity-highlight .result-value {
+    color: var(--accent-gratuity);
+}
+
+/* Result Rows */
+.result-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.res-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px dashed var(--card-border);
+}
+
+.res-label {
+    color: var(--text-muted);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.res-val {
+    font-weight: 700;
+    color: var(--text-main);
+    font-family: var(--font-mono);
+}
+
+.tax-val {
+    color: var(--accent-gst);
+}
+
+.interest-val {
+    color: var(--warning);
+}
+
+.growth-val {
+    color: var(--success);
+}
+
+.total-tax-row, .total-pay-row {
+    border-bottom: none;
+    padding-top: 0.5rem;
+    font-size: 1rem;
+}
+
+.total-tax-row .res-label, .total-pay-row .res-label {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.total-tax-row .res-val, .total-pay-row .res-val {
+    font-size: 1.1rem;
+}
+
+/* Info Box */
+.info-box {
+    background-color: var(--input-bg);
+    border-left: 3px solid var(--primary);
+    padding: 0.85rem 1rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Chart Container */
+.chart-section {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 0;
+}
+
+.chart-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-principal {
+    background-color: #6366f1;
+}
+
+.dot-interest {
+    background-color: #f59e0b;
+}
+
+.dot-growth {
+    background-color: #10b981;
+}
+
+/* --------------------------------------------------------------------------
+   5. Normal Calculator Keypad
+   -------------------------------------------------------------------------- */
+.normal-calc-wrapper {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 1.75rem;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.normal-calc-card {
+    background-color: var(--normal-calc-bg);
+    border: 1px solid var(--card-border);
+    padding: 1.5rem;
+}
+
+.calc-screen {
+    background-color: var(--normal-calc-screen);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1rem;
+    text-align: right;
+    margin-bottom: 1.25rem;
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    word-break: break-all;
+    overflow-x: auto;
+}
+
+.screen-history {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-family: var(--font-mono);
+    min-height: 1.2rem;
+    margin-bottom: 0.25rem;
+}
+
+.screen-current {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+}
+
+/* Keypad Grid */
+.calc-keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+}
+
+.btn {
+    height: 58px;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    user-select: none;
+}
+
+.btn-digit {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #f9fafb;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.btn-digit:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.btn-operator {
+    background-color: rgba(99, 102, 241, 0.15);
+    color: var(--accent-gst);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.btn-operator:hover {
+    background-color: rgba(99, 102, 241, 0.3);
+}
+
+.btn-action {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.btn-action:hover {
+    background-color: rgba(239, 68, 68, 0.3);
+}
+
+.btn-equals {
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.btn-equals:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+/* Keyboard Tips Card */
+.key-tips-card {
+    height: fit-content;
+}
+
+.key-tips-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.tips-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.tips-list li {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+kbd {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    box-shadow: 0 2px 0 var(--input-border);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* --------------------------------------------------------------------------
+   6. Toast Notifications & Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--text-main);
+    color: var(--bg-main);
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+    .calc-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .normal-calc-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+    }
+
+    .sidebar.mobile-open {
+        transform: translateX(0);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .mobile-close-btn {
+        display: block;
+    }
+
+    .main-wrapper {
+        margin-left: 0;
+        width: 100vw;
+    }
+
+    .mobile-toggle-btn {
+        display: flex;
+    }
+
+    .top-header {
+        padding: 0 1.25rem;
+    }
+
+    .content-body {
+        padding: 1.25rem;
+    }
+
+    .header-title h1 {
+        font-size: 1.15rem;
+    }
+
+    .header-title p {
+        display: none;
+    }
+
+    .rate-chips {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 1.25rem;
+    }
+
+    .result-value {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        height: 50px;
+        font-size: 1.1rem;
+    }
+
+    .calc-keypad {
+        gap: 0.5rem;
+    }
+}
