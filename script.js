@@ -124,22 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* --------------------------------------------------------------------------
-       3. Dark / Light Theme Handler
+       3. Theme Handler (Strict Light Mode)
        -------------------------------------------------------------------------- */
-    const themeToggle = document.getElementById('themeToggle');
-    const htmlElement = document.documentElement;
-
-    const savedTheme = localStorage.getItem('hisab_theme') || 'dark';
-    htmlElement.setAttribute('data-theme', savedTheme);
-
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = htmlElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        htmlElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('hisab_theme', newTheme);
-
-        updateChartThemes(newTheme);
-    });
+    document.documentElement.setAttribute('data-theme', 'light');
 
     /* --------------------------------------------------------------------------
        4. GST Calculator Module

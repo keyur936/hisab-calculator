@@ -57,40 +57,6 @@
     --normal-calc-screen: #0f172a;
 }
 
-[data-theme="dark"] {
-    /* Dark Theme Palette */
-    --bg-main: #0b0f19;
-    --bg-sidebar: #111827;
-    --bg-header: rgba(17, 24, 39, 0.85);
-    --card-bg: #1f2937;
-    --card-border: rgba(255, 255, 255, 0.08);
-
-    --text-main: #f9fafb;
-    --text-muted: #9ca3af;
-    --text-light: #6b7280;
-
-    --input-bg: #111827;
-    --input-border: #374151;
-    --input-focus-border: #818cf8;
-    --input-focus-glow: rgba(129, 140, 248, 0.25);
-
-    --primary: #6366f1;
-    --primary-hover: #4f46e5;
-    --primary-light: rgba(99, 102, 241, 0.2);
-
-    --accent-gst: #818cf8;
-    --accent-emi: #10b981;
-    --accent-fd: #38bdf8;
-    --accent-normal: #fbbf24;
-
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
-
-    --normal-calc-bg: #111827;
-    --normal-calc-screen: #030712;
-}
-
 * {
     margin: 0;
     padding: 0;
