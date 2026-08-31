@@ -17,18 +17,40 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Helper Function: Indian Rupee Formatter
-def format_inr(val):
-    if val is None:
-        return "₹ 0.00"
-    # Format as Indian Number System
-    s, *d = f"{val:.2f}".split(".")
-    r = ",".join([s[-3:]] + [s[:-3][max(0, i - 2):i] for i in range(len(s[:-3]), 0, -2)][::-1]) if len(s) > 3 else s
-    return f"₹ {r}.{d[0]}"
+# Currency Options Dictionary
+CURRENCIES = {
+    "🇮🇳 INR (₹) Rupee": {"symbol": "₹", "sep": True},
+    "🇺🇸 USD ($) Dollar": {"symbol": "$", "sep": False},
+    "🇪🇺 EUR (€) Euro": {"symbol": "€", "sep": False},
+    "🇬🇧 GBP (£) Pound": {"symbol": "£", "sep": False},
+    "🇹🇭 THB (฿) Baht": {"symbol": "฿", "sep": False},
+    "🇦🇪 AED (د.إ) Dirham": {"symbol": "AED ", "sep": False},
+    "🇯🇵 JPY (¥) Yen": {"symbol": "¥", "sep": False},
+    "🇨🇦 CAD ($) Dollar": {"symbol": "C$", "sep": False}
+}
 
 # Sidebar Navigation Header
 st.sidebar.title("⚡ Hisab Calculator")
 st.sidebar.caption("All-in-One Financial Dashboard")
+
+selected_currency_label = st.sidebar.selectbox(
+    "Select Currency / मुद्रा:",
+    list(CURRENCIES.keys()),
+    index=0
+)
+
+curr_symbol = CURRENCIES[selected_currency_label]["symbol"]
+
+# Helper Function: Dynamic Currency Formatter
+def format_inr(val):
+    if val is None:
+        return f"{curr_symbol} 0.00"
+    s, *d = f"{val:.2f}".split(".")
+    if CURRENCIES[selected_currency_label]["sep"] and len(s) > 3:
+        r = ",".join([s[-3:]] + [s[:-3][max(0, i - 2):i] for i in range(len(s[:-3]), 0, -2)][::-1])
+    else:
+        r = f"{int(s):,}"
+    return f"{curr_symbol} {r}.{d[0]}"
 
 calc_option = st.sidebar.radio(
     "Select Calculator",
@@ -44,7 +66,6 @@ calc_option = st.sidebar.radio(
 )
 
 st.sidebar.markdown("---")
-st.sidebar.info("🇮🇳 Standard INR (₹) Financial Suite")
 
 # ------------------------------------------------------------------------------
 # 1. GST CALCULATOR

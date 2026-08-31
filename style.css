@@ -206,17 +206,37 @@ body {
     border-top: 1px solid var(--card-border);
 }
 
-.currency-badge {
+.currency-picker {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.picker-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-light);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.currency-select {
+    width: 100%;
     background-color: var(--input-bg);
-    border: 1px solid var(--card-border);
-    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--input-border);
+    color: var(--text-main);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.55rem 0.75rem;
     border-radius: var(--radius-sm);
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-muted);
+    outline: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.currency-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 /* Main Content Wrapper */

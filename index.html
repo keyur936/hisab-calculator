@@ -72,9 +72,18 @@
             </nav>
 
             <div class="sidebar-footer">
-                <div class="currency-badge">
-                    <span class="badge-flag">🇮🇳</span>
-                    <span class="badge-text">INR (₹) Standard</span>
+                <div class="currency-picker">
+                    <label for="currencySelect" class="picker-label">Currency / मुद्रा:</label>
+                    <select id="currencySelect" class="currency-select">
+                        <option value="INR" data-symbol="₹" data-locale="en-IN" selected>🇮🇳 INR (₹) Rupee</option>
+                        <option value="USD" data-symbol="$" data-locale="en-US">🇺🇸 USD ($) Dollar</option>
+                        <option value="EUR" data-symbol="€" data-locale="de-DE">🇪🇺 EUR (€) Euro</option>
+                        <option value="GBP" data-symbol="£" data-locale="en-GB">🇬🇧 GBP (£) Pound</option>
+                        <option value="THB" data-symbol="฿" data-locale="th-TH">🇹🇭 THB (฿) Baht</option>
+                        <option value="AED" data-symbol="AED " data-locale="ar-AE">🇦🇪 AED (د.إ) Dirham</option>
+                        <option value="JPY" data-symbol="¥" data-locale="ja-JP">🇯🇵 JPY (¥) Yen</option>
+                        <option value="CAD" data-symbol="C$" data-locale="en-CA">🇨🇦 CAD ($) Dollar</option>
+                    </select>
                 </div>
             </div>
         </aside>
@@ -113,7 +122,7 @@
                             <div class="form-group">
                                 <label for="gst-amount">Amount (₹)</label>
                                 <div class="input-wrapper">
-                                    <span class="input-prefix">₹</span>
+                                    <span class="input-prefix currency-symbol">₹</span>
                                     <input type="number" id="gst-amount" placeholder="e.g. 10000" min="0" step="any" value="10000">
                                 </div>
                                 <span class="error-msg" id="gst-amount-error"></span>
@@ -208,7 +217,7 @@
                                     <span class="slider-val-badge" id="emi-amount-badge">₹ 5,00,000</span>
                                 </div>
                                 <div class="input-wrapper">
-                                    <span class="input-prefix">₹</span>
+                                    <span class="input-prefix currency-symbol">₹</span>
                                     <input type="number" id="emi-amount" min="1000" max="100000000" value="500000" step="5000">
                                 </div>
                                 <input type="range" class="range-slider" id="emi-amount-slider" min="10000" max="10000000" value="500000" step="10000">
@@ -307,7 +316,7 @@
                                     <span class="slider-val-badge" id="fd-amount-badge">₹ 1,00,000</span>
                                 </div>
                                 <div class="input-wrapper">
-                                    <span class="input-prefix">₹</span>
+                                    <span class="input-prefix currency-symbol">₹</span>
                                     <input type="number" id="fd-amount" min="1000" max="100000000" value="100000" step="5000">
                                 </div>
                                 <input type="range" class="range-slider" id="fd-amount-slider" min="5000" max="5000000" value="100000" step="5000">
@@ -416,7 +425,7 @@
                                     <span class="slider-val-badge" id="sip-amount-badge">₹ 5,000</span>
                                 </div>
                                 <div class="input-wrapper">
-                                    <span class="input-prefix">₹</span>
+                                    <span class="input-prefix currency-symbol">₹</span>
                                     <input type="number" id="sip-amount" min="500" max="10000000" value="5000" step="500">
                                 </div>
                                 <input type="range" class="range-slider" id="sip-amount-slider" min="500" max="100000" value="5000" step="500">
@@ -527,7 +536,7 @@
                                     <span class="slider-val-badge" id="rd-amount-badge">₹ 5,000</span>
                                 </div>
                                 <div class="input-wrapper">
-                                    <span class="input-prefix">₹</span>
+                                    <span class="input-prefix currency-symbol">₹</span>
                                     <input type="number" id="rd-amount" min="500" max="5000000" value="5000" step="500">
                                 </div>
                                 <input type="range" class="range-slider" id="rd-amount-slider" min="500" max="100000" value="5000" step="500">
@@ -635,17 +644,17 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="gratuity-basic">Last Drawn Basic Salary (₹)</label>
+                                <label for="gratuity-basic">Last Drawn Basic Salary</label>
                                 <div class="input-wrapper">
-                                    <span class="input-prefix">₹</span>
+                                    <span class="input-prefix currency-symbol">₹</span>
                                     <input type="number" id="gratuity-basic" min="0" value="50000" step="1000">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="gratuity-da">Dearness Allowance (DA) (₹)</label>
+                                <label for="gratuity-da">Dearness Allowance (DA)</label>
                                 <div class="input-wrapper">
-                                    <span class="input-prefix">₹</span>
+                                    <span class="input-prefix currency-symbol">₹</span>
                                     <input type="number" id="gratuity-da" min="0" value="10000" step="1000">
                                 </div>
                             </div>

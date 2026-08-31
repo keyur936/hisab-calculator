@@ -7,15 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
     /* --------------------------------------------------------------------------
        1. Utility Helpers & Formatting
        -------------------------------------------------------------------------- */
-    const formatINR = (value) => {
-        if (isNaN(value) || value === null) return '₹ 0.00';
-        return new Intl.NumberFormat('en-IN', {
-            style: 'currency',
-            currency: 'INR',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(value);
+    let activeCurrency = {
+        code: 'INR',
+        symbol: '₹',
+        locale: 'en-IN'
     };
+
+    const formatCurrency = (value) => {
+        if (isNaN(value) || value === null) return `${activeCurrency.symbol} 0.00`;
+        try {
+            return new Intl.NumberFormat(activeCurrency.locale, {
+                style: 'currency',
+                currency: activeCurrency.code,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(value);
+        } catch(e) {
+            return `${activeCurrency.symbol} ${value.toFixed(2)}`;
+        }
+    };
+
+    const formatINR = formatCurrency;
 
     const showToast = (message) => {
         const toast = document.getElementById('toast');
@@ -124,9 +136,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* --------------------------------------------------------------------------
-       3. Theme Handler (Strict Light Mode)
+       3. Theme & Currency Switcher Handler
        -------------------------------------------------------------------------- */
     document.documentElement.setAttribute('data-theme', 'light');
+
+    const currencySelect = document.getElementById('currencySelect');
+
+    const updateCurrencyState = () => {
+        if (!currencySelect) return;
+        const selectedOpt = currencySelect.options[currencySelect.selectedIndex];
+        activeCurrency.code = currencySelect.value;
+        activeCurrency.symbol = selectedOpt.dataset.symbol || '₹';
+        activeCurrency.locale = selectedOpt.dataset.locale || 'en-IN';
+
+        const currencySymbols = document.querySelectorAll('.currency-symbol');
+        currencySymbols.forEach(el => {
+            el.textContent = activeCurrency.symbol.trim();
+        });
+
+        localStorage.setItem('hisab_currency', currencySelect.value);
+
+        // Refresh active calculations
+        if (typeof calculateGST === 'function') calculateGST();
+        if (typeof calculateEMI === 'function') calculateEMI();
+        if (typeof calculateFD === 'function') calculateFD();
+        if (typeof calculateSIP === 'function') calculateSIP();
+        if (typeof calculateRD === 'function') calculateRD();
+        if (typeof calculateGratuity === 'function') calculateGratuity();
+    };
+
+    if (currencySelect) {
+        const savedCurrency = localStorage.getItem('hisab_currency');
+        if (savedCurrency) {
+            currencySelect.value = savedCurrency;
+        }
+        currencySelect.addEventListener('change', updateCurrencyState);
+        updateCurrencyState();
+    }
 
     /* --------------------------------------------------------------------------
        4. GST Calculator Module
