@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hisab Calculator – Free All-in-One Financial Calculator (GST, EMI, SIP, FD, RD, Gratuity)</title>
-    <meta name="description" content="Hisab Calculator is a free all-in-one financial calculator for GST, Loan EMI with repayment schedule, SIP with step-up, FD, RD, and Gratuity. Fast, accurate & multi-currency.">
-    <meta name="keywords" content="hisab calculator, gst calculator online, emi calculator, sip calculator, fd calculator, rd calculator, gratuity calculator, financial calculator india, loan emi calculator, compound interest calculator">
+    <title>Hisab Calculator – Free Financial Calculator (GST, EMI, SIP, FD, RD, ITR & Gratuity)</title>
+    <meta name="description" content="Hisab Calculator is a free all-in-one financial calculator for GST, Loan EMI with repayment schedule, SIP with step-up, FD, RD, ITR Income Tax, and Gratuity. Fast & multi-currency.">
+    <meta name="keywords" content="hisab calculator, itr calculator, income tax calculator india, gst calculator online, emi calculator, sip calculator, fd calculator, rd calculator, gratuity calculator, new tax regime vs old tax regime">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <meta name="author" content="Hisab Calculator">
     <meta name="language" content="English">
@@ -18,14 +18,14 @@
     <!-- Open Graph / Facebook / WhatsApp SEO -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Hisab Calculator">
-    <meta property="og:title" content="Hisab Calculator – Free All-in-One Financial Calculator">
-    <meta property="og:description" content="Instant online calculations for GST, Loan EMI Amortization Schedule, Step-up SIP Returns, FD, RD, and Gratuity. 100% free and mobile-friendly.">
+    <meta property="og:title" content="Hisab Calculator – Free All-in-One Financial & ITR Calculator">
+    <meta property="og:description" content="Instant online calculations for GST, Loan EMI Schedule, ITR Income Tax (New vs Old Regime), Step-up SIP, FD, RD, and Gratuity. 100% free.">
     <meta property="og:url" content="https://hisab-calculator.vercel.app/">
 
     <!-- Twitter Card SEO -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Hisab Calculator – All-in-One Financial Calculator">
-    <meta name="twitter:description" content="Calculate GST, EMI, SIP, FD, RD, and Gratuity instantly with Hisab Calculator. Interactive graphs and amortization tables included.">
+    <meta name="twitter:title" content="Hisab Calculator – All-in-One Financial & ITR Calculator">
+    <meta name="twitter:description" content="Calculate GST, EMI, ITR Income Tax, SIP, FD, RD, and Gratuity instantly with Hisab Calculator. Interactive graphs and comparison banners included.">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,6 +144,11 @@
                 <button class="nav-item" data-tab="gratuity" id="nav-gratuity">
                     <span class="nav-icon">💼</span>
                     <span class="nav-label">Gratuity Calculator</span>
+                </button>
+
+                <button class="nav-item" data-tab="itr" id="nav-itr">
+                    <span class="nav-icon">📄</span>
+                    <span class="nav-label">ITR Calculator</span>
                 </button>
 
                 <button class="nav-item" data-tab="normal" id="nav-normal">
@@ -832,6 +837,153 @@
 
                             <div class="info-box">
                                 <p id="gratuity-info-text">Formula: (Last Drawn Salary × 15 × Years of Service) ÷ 26.<br>Note: Continuous service of at least 5 years is mandatory for eligibility under the Payment of Gratuity Act 1972. Tax exemption limit is up to ₹20 Lakhs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 7. ITR & INCOME TAX CALCULATOR PANEL -->
+                <section class="calculator-panel" id="panel-itr">
+                    <div class="calc-grid">
+                        <!-- Input Card -->
+                        <div class="card input-card">
+                            <div class="card-header">
+                                <h2>Income Details & Deductions</h2>
+                                <button class="reset-btn" id="itr-reset" title="Reset fields">🔄 Reset</button>
+                            </div>
+
+                            <!-- Assessment Year & Age Selector -->
+                            <div class="form-row two-col">
+                                <div class="form-group">
+                                    <label for="itr-ay">Assessment Year</label>
+                                    <select id="itr-ay" class="form-select">
+                                        <option value="2025-2026" selected>AY 2025-26 (FY 2024-25)</option>
+                                        <option value="2024-2025">AY 2024-25 (FY 2023-24)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="itr-age">Age Category</label>
+                                    <select id="itr-age" class="form-select">
+                                        <option value="below60" selected>Below 60 years</option>
+                                        <option value="60to79">60 - 79 years (Senior)</option>
+                                        <option value="80plus">80+ years (Super Senior)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Tax Regime Selection Chips -->
+                            <div class="form-group">
+                                <label>Tax Regime / टैक्स व्यवस्था</label>
+                                <div class="regime-chip-group">
+                                    <button type="button" class="regime-chip active" id="itr-regime-new" data-regime="new">✨ New Tax Regime (Recommended)</button>
+                                    <button type="button" class="regime-chip" id="itr-regime-old" data-regime="old">📜 Old Tax Regime</button>
+                                </div>
+                            </div>
+
+                            <!-- Annual Gross Salary Income -->
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="itr-salary">Gross Annual Salary Income (<span class="currency-symbol">₹</span>)</label>
+                                    <span class="val-badge" id="itr-salary-badge">₹12,00,000</span>
+                                </div>
+                                <input type="number" id="itr-salary" class="form-control" value="1200000" min="0" step="10000">
+                                <input type="range" id="itr-salary-slider" class="form-range" value="1200000" min="0" max="5000000" step="10000">
+                            </div>
+
+                            <!-- Income from Other Sources -->
+                            <div class="form-group">
+                                <div class="label-with-val">
+                                    <label for="itr-other">Income from Other Sources / Interest (<span class="currency-symbol">₹</span>)</label>
+                                    <span class="val-badge" id="itr-other-badge">₹50,000</span>
+                                </div>
+                                <input type="number" id="itr-other" class="form-control" value="50000" min="0" step="5000">
+                            </div>
+
+                            <!-- Old Regime Deductions Section (Toggleable) -->
+                            <div class="deductions-container" id="itr-deductions-container" style="display: none; background: var(--input-bg); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--card-border); margin-bottom: 1.25rem;">
+                                <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">Exemptions & Deductions (Old Regime)</h3>
+                                
+                                <div class="form-group">
+                                    <label for="itr-80c">Sec 80C (PPF, EPF, ELSS, LIC, Home Loan Principal - Max ₹1.5L)</label>
+                                    <input type="number" id="itr-80c" class="form-control" value="150000" min="0" max="150000" step="5000">
+                                </div>
+
+                                <div class="form-row two-col">
+                                    <div class="form-group">
+                                        <label for="itr-80d">Sec 80D (Health Insurance)</label>
+                                        <input type="number" id="itr-80d" class="form-control" value="25000" min="0" step="1000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="itr-hra">HRA & Other Exemptions</label>
+                                        <input type="number" id="itr-hra" class="form-control" value="100000" min="0" step="5000">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="itr-nps">Sec 80CCD(1B) (NPS Max ₹50k)</label>
+                                    <input type="number" id="itr-nps" class="form-control" value="50000" min="0" max="50000" step="5000">
+                                </div>
+                            </div>
+
+                            <button class="calculate-btn" id="itr-calculate-btn">Calculate Income Tax (ITR)</button>
+                        </div>
+
+                        <!-- Results Card -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <h2>ITR Tax Liability Summary</h2>
+                                <button class="copy-btn" id="itr-copy" title="Copy summary">📋 Copy</button>
+                            </div>
+
+                            <!-- Regime Comparison Banner -->
+                            <div class="regime-recommendation-box" id="itr-regime-recommendation" style="background: var(--primary-light); color: var(--primary-dark); padding: 0.75rem 1rem; border-radius: var(--radius-md); font-weight: 600; font-size: 0.9rem; margin-bottom: 1.25rem; border: 1px solid var(--primary);">
+                                🎉 <strong>New Regime</strong> saves you <strong>₹18,200</strong> more tax!
+                            </div>
+
+                            <div class="result-highlight itr-highlight">
+                                <span class="result-label">Total Tax Liability (Inc. 4% Cess)</span>
+                                <span class="result-value" id="itr-res-tax">₹ 85,800.00</span>
+                            </div>
+
+                            <div class="result-rows">
+                                <div class="res-row">
+                                    <span class="res-label">Gross Total Income</span>
+                                    <span class="res-val" id="itr-res-gross">₹ 12,50,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">Standard Deduction</span>
+                                    <span class="res-val" id="itr-res-std-ded">₹ 75,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">Total Deductions / Exemptions</span>
+                                    <span class="res-val" id="itr-res-total-ded">₹ 75,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">Net Taxable Income</span>
+                                    <span class="res-val highlight-sub" id="itr-res-taxable">₹ 11,75,000.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">Income Tax (Before Cess)</span>
+                                    <span class="res-val" id="itr-res-base-tax">₹ 82,500.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">Sec 87A Tax Rebate</span>
+                                    <span class="res-val" id="itr-res-rebate">₹ 0.00</span>
+                                </div>
+                                <div class="res-row">
+                                    <span class="res-label">Health & Education Cess (4%)</span>
+                                    <span class="res-val" id="itr-res-cess">₹ 3,300.00</span>
+                                </div>
+                                <div class="res-row total-pay-row">
+                                    <span class="res-label">Monthly Take-Home Salary</span>
+                                    <span class="res-val" id="itr-res-takehome" style="color: var(--success); font-weight: 800;">₹ 97,016.00</span>
+                                </div>
+                            </div>
+
+                            <!-- Chart Visualization -->
+                            <div class="chart-container" style="position: relative; height:200px; width:100%; margin-top: 1rem;">
+                                <canvas id="itrChart"></canvas>
                             </div>
                         </div>
                     </div>

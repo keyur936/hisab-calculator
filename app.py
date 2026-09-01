@@ -61,6 +61,7 @@ calc_option = st.sidebar.radio(
         "📈 SIP Calculator",
         "🔄 RD Calculator",
         "💼 Gratuity Calculator",
+        "📄 ITR Calculator",
         "🔢 Normal Calculator"
     ]
 )
@@ -369,7 +370,119 @@ elif calc_option == "💼 Gratuity Calculator":
 
 
 # ------------------------------------------------------------------------------
-# 7. NORMAL CALCULATOR
+# 7. ITR & INCOME TAX CALCULATOR
+# ------------------------------------------------------------------------------
+elif calc_option == "📄 ITR Calculator":
+    st.header("📄 ITR & Income Tax Calculator")
+    st.caption("Calculate Income Tax liability, compare New vs Old Tax Regime, and view net take-home salary")
+    
+    col1, col2 = st.columns([1, 1])
+    
+    with col1:
+        st.subheader("Income Details & Regime")
+        gross_salary = st.number_input("Gross Annual Salary Income (₹)", min_value=0.0, value=1200000.0, step=25000.0)
+        other_income = st.number_input("Income from Other Sources / Interest (₹)", min_value=0.0, value=50000.0, step=5000.0)
+        
+        regime = st.radio("Select Tax Regime", ["New Tax Regime (Default)", "Old Tax Regime"], horizontal=True)
+        is_new = "New" in regime
+        
+        age_cat = st.selectbox("Age Category", ["Below 60 years", "60 - 79 years (Senior)", "80+ years (Super Senior)"])
+        
+        c80 = 0.0
+        d80 = 0.0
+        hra = 0.0
+        nps = 0.0
+        
+        if not is_new:
+            st.markdown("### Old Regime Deductions")
+            c80 = st.number_input("Sec 80C (EPF, PPF, ELSS - Max ₹1.5L)", min_value=0.0, max_value=150000.0, value=150000.0, step=5000.0)
+            d80 = st.number_input("Sec 80D (Health Insurance)", min_value=0.0, value=25000.0, step=1000.0)
+            hra = st.number_input("HRA & Other Exemptions", min_value=0.0, value=100000.0, step=5000.0)
+            nps = st.number_input("Sec 80CCD(1B) (NPS - Max ₹50k)", min_value=0.0, max_value=50000.0, value=50000.0, step=5000.0)
+
+    with col2:
+        st.subheader("Tax Liability Summary")
+        
+        def calc_tax(g_sal, o_inc, use_new, age):
+            tot_gross = g_sal + o_inc
+            if use_new:
+                std_d = 75000.0
+                taxable = max(0.0, tot_gross - std_d)
+                if taxable <= 300000:
+                    btax = 0.0
+                elif taxable <= 700000:
+                    btax = (taxable - 300000) * 0.05
+                elif taxable <= 1000000:
+                    btax = 20000 + (taxable - 700000) * 0.10
+                elif taxable <= 1200000:
+                    btax = 50000 + (taxable - 1000000) * 0.15
+                elif taxable <= 1500000:
+                    btax = 80000 + (taxable - 1200000) * 0.20
+                else:
+                    btax = 140000 + (taxable - 1500000) * 0.30
+                reb = btax if taxable <= 700000 else 0.0
+                btax_reb = max(0.0, btax - reb)
+                tot_ded = std_d
+            else:
+                std_d = 50000.0
+                other_d = min(150000.0, c80) + d80 + hra + min(50000.0, nps)
+                tot_ded = std_d + other_d
+                taxable = max(0.0, tot_gross - tot_ded)
+                ex_lim = 250000.0
+                if "60 - 79" in age: ex_lim = 300000.0
+                if "80+" in age: ex_lim = 500000.0
+                
+                if taxable <= ex_lim:
+                    btax = 0.0
+                elif taxable <= 500000:
+                    btax = (taxable - ex_lim) * 0.05
+                elif taxable <= 1000000:
+                    s1 = (500000 - ex_lim) * 0.05
+                    btax = s1 + (taxable - 500000) * 0.20
+                else:
+                    s1 = (500000 - ex_lim) * 0.05
+                    btax = s1 + 100000 + (taxable - 1000000) * 0.30
+                reb = min(12500.0, btax) if taxable <= 500000 else 0.0
+                btax_reb = max(0.0, btax - reb)
+                
+            cess_val = btax_reb * 0.04
+            total_tax_val = btax_reb + cess_val
+            return tot_gross, std_d, tot_ded, taxable, btax, reb, cess_val, total_tax_val
+        
+        g_tot, s_ded, t_ded, tax_inc, b_tx, r_bt, cess_a, total_tax_a = calc_tax(gross_salary, other_income, is_new, age_cat)
+        _, _, _, _, _, _, _, tax_new_alt = calc_tax(gross_salary, other_income, True, age_cat)
+        _, _, _, _, _, _, _, tax_old_alt = calc_tax(gross_salary, other_income, False, age_cat)
+        
+        diff = abs(tax_new_alt - tax_old_alt)
+        if tax_new_alt < tax_old_alt:
+            st.info(f"🎉 **New Tax Regime** saves you **{format_inr(diff)}** more tax!")
+        elif tax_old_alt < tax_new_alt:
+            st.info(f"📜 **Old Tax Regime** saves you **{format_inr(diff)}** more tax!")
+        else:
+            st.info(f"⚖️ Both Tax Regimes result in the same tax liability ({format_inr(tax_new_alt)}).")
+
+        st.metric("Total Tax Liability (Inc. 4% Cess)", format_inr(total_tax_a))
+        
+        mcol1, mcol2 = st.columns(2)
+        mcol1.metric("Gross Total Income", format_inr(g_tot))
+        mcol2.metric("Net Taxable Income", format_inr(tax_inc))
+        
+        mcol3, mcol4 = st.columns(2)
+        mcol3.metric("Total Deductions Allowed", format_inr(t_ded))
+        mcol4.metric("Monthly Take-Home Salary", format_inr(max(0.0, (g_tot - total_tax_a)/12.0)))
+        
+        fig = go.Figure(data=[go.Pie(
+            labels=['Annual Take-Home', 'Income Tax Liability', 'Exemptions & Deductions'],
+            values=[max(0, g_tot - total_tax_a), max(0, total_tax_a), max(0, t_ded)],
+            hole=.6,
+            marker_colors=['#10b981', '#ef4444', '#6366f1']
+        )])
+        fig.update_layout(margin=dict(t=20, b=20, l=20, r=20), height=220)
+        st.plotly_chart(fig, use_container_width=True)
+
+
+# ------------------------------------------------------------------------------
+# 8. NORMAL CALCULATOR
 # ------------------------------------------------------------------------------
 elif calc_option == "🔢 Normal Calculator":
     st.header("🔢 Normal Calculator")

@@ -2,6 +2,7 @@ window.emiChart = null;
 window.fdChart = null;
 window.sipChart = null;
 window.rdChart = null;
+window.itrChart = null;
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -83,6 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gratuity: {
             title: 'Gratuity Calculator',
             subtitle: 'Estimate retirement gratuity payout based on Last Drawn Salary and service tenure'
+        },
+        itr: {
+            title: 'ITR & Income Tax Calculator',
+            subtitle: 'Calculate Income Tax Return liability, compare New vs Old Tax Regime, and view net take-home salary'
         },
         normal: {
             title: 'Normal Calculator',
@@ -1302,7 +1307,282 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* --------------------------------------------------------------------------
-       8. Initial Application Run
+       8. ITR & Income Tax Calculator Module
+       -------------------------------------------------------------------------- */
+    const itrSalaryInput = document.getElementById('itr-salary');
+    const itrSalarySlider = document.getElementById('itr-salary-slider');
+    const itrSalaryBadge = document.getElementById('itr-salary-badge');
+
+    const itrOtherInput = document.getElementById('itr-other');
+    const itrOtherBadge = document.getElementById('itr-other-badge');
+
+    const itrAySelect = document.getElementById('itr-ay');
+    const itrAgeSelect = document.getElementById('itr-age');
+
+    const itrRegimeNewBtn = document.getElementById('itr-regime-new');
+    const itrRegimeOldBtn = document.getElementById('itr-regime-old');
+
+    const itrDeductionsContainer = document.getElementById('itr-deductions-container');
+    const itr80cInput = document.getElementById('itr-80c');
+    const itr80dInput = document.getElementById('itr-80d');
+    const itrHraInput = document.getElementById('itr-hra');
+    const itrNpsInput = document.getElementById('itr-nps');
+
+    const itrCalculateBtn = document.getElementById('itr-calculate-btn');
+    const itrResetBtn = document.getElementById('itr-reset');
+    const itrCopyBtn = document.getElementById('itr-copy');
+
+    // Outputs
+    const itrResTax = document.getElementById('itr-res-tax');
+    const itrResGross = document.getElementById('itr-res-gross');
+    const itrResStdDed = document.getElementById('itr-res-std-ded');
+    const itrResTotalDed = document.getElementById('itr-res-total-ded');
+    const itrResTaxable = document.getElementById('itr-res-taxable');
+    const itrResBaseTax = document.getElementById('itr-res-base-tax');
+    const itrResRebate = document.getElementById('itr-res-rebate');
+    const itrResCess = document.getElementById('itr-res-cess');
+    const itrResTakehome = document.getElementById('itr-res-takehome');
+    const itrRegimeRecommendation = document.getElementById('itr-regime-recommendation');
+
+    let currentTaxRegime = 'new';
+
+    const initITRChart = () => {
+        const chartEl = document.getElementById('itrChart');
+        if (!chartEl) return;
+        const ctx = chartEl.getContext('2d');
+        window.itrChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Annual Take-Home', 'Income Tax Liability', 'Exemptions & Deductions'],
+                datasets: [{
+                    data: [1164200, 85800, 75000],
+                    backgroundColor: ['#10b981', '#ef4444', '#6366f1'],
+                    borderWidth: 0,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.label}: ${formatCurrency(context.raw)}`;
+                            }
+                        }
+                    }
+                },
+                cutout: '72%'
+            }
+        });
+    };
+
+    function computeTaxForRegime(grossSalary, otherIncome, regime, ageGroup) {
+        const grossIncome = grossSalary + otherIncome;
+        let stdDed = 0;
+        let otherDeductions = 0;
+        let taxableIncome = 0;
+        let baseTax = 0;
+        let rebate = 0;
+
+        if (regime === 'new') {
+            stdDed = 75000;
+            taxableIncome = Math.max(0, grossIncome - stdDed);
+
+            // New Tax Regime Slabs (AY 2025-26)
+            if (taxableIncome <= 300000) {
+                baseTax = 0;
+            } else if (taxableIncome <= 700000) {
+                baseTax = (taxableIncome - 300000) * 0.05;
+            } else if (taxableIncome <= 1000000) {
+                baseTax = 20000 + (taxableIncome - 700000) * 0.10;
+            } else if (taxableIncome <= 1200000) {
+                baseTax = 50000 + (taxableIncome - 1000000) * 0.15;
+            } else if (taxableIncome <= 1500000) {
+                baseTax = 80000 + (taxableIncome - 1200000) * 0.20;
+            } else {
+                baseTax = 140000 + (taxableIncome - 1500000) * 0.30;
+            }
+
+            // Section 87A Rebate for New Regime (Up to ₹7 Lakhs taxable income)
+            if (taxableIncome <= 700000) {
+                rebate = baseTax;
+                baseTax = 0;
+            }
+        } else {
+            // Old Tax Regime
+            stdDed = 50000;
+            const c80 = Math.min(150000, parseFloat(itr80cInput ? itr80cInput.value : 0) || 0);
+            const d80 = parseFloat(itr80dInput ? itr80dInput.value : 0) || 0;
+            const hra = parseFloat(itrHraInput ? itrHraInput.value : 0) || 0;
+            const nps = Math.min(50000, parseFloat(itrNpsInput ? itrNpsInput.value : 0) || 0);
+
+            otherDeductions = c80 + d80 + hra + nps;
+            taxableIncome = Math.max(0, grossIncome - stdDed - otherDeductions);
+
+            let exemptionLimit = 250000;
+            if (ageGroup === '60to79') exemptionLimit = 300000;
+            if (ageGroup === '80plus') exemptionLimit = 500000;
+
+            if (taxableIncome <= exemptionLimit) {
+                baseTax = 0;
+            } else if (taxableIncome <= 500000) {
+                baseTax = (taxableIncome - exemptionLimit) * 0.05;
+            } else if (taxableIncome <= 1000000) {
+                const taxSlab1 = (500000 - exemptionLimit) * 0.05;
+                baseTax = taxSlab1 + (taxableIncome - 500000) * 0.20;
+            } else {
+                const taxSlab1 = (500000 - exemptionLimit) * 0.05;
+                baseTax = taxSlab1 + 100000 + (taxableIncome - 1000000) * 0.30;
+            }
+
+            // Section 87A Rebate for Old Regime (Up to ₹5 Lakhs taxable income)
+            if (taxableIncome <= 500000) {
+                rebate = Math.min(12500, baseTax);
+                baseTax = Math.max(0, baseTax - rebate);
+            }
+        }
+
+        const taxAfterRebate = Math.max(0, baseTax);
+        const cess = taxAfterRebate * 0.04;
+        const totalTax = taxAfterRebate + cess;
+
+        return {
+            grossIncome,
+            stdDed,
+            otherDeductions,
+            totalDeductions: stdDed + otherDeductions,
+            taxableIncome,
+            baseTax,
+            rebate,
+            cess,
+            totalTax,
+            monthlyTakeHome: Math.max(0, (grossIncome - totalTax) / 12)
+        };
+    }
+
+    function calculateITR() {
+        if (!itrSalaryInput || !itrOtherInput) return;
+
+        const salary = parseFloat(itrSalaryInput.value) || 0;
+        const other = parseFloat(itrOtherInput.value) || 0;
+        const ageGroup = itrAgeSelect ? itrAgeSelect.value : 'below60';
+
+        const activeResult = computeTaxForRegime(salary, other, currentTaxRegime, ageGroup);
+        const newRegimeResult = computeTaxForRegime(salary, other, 'new', ageGroup);
+        const oldRegimeResult = computeTaxForRegime(salary, other, 'old', ageGroup);
+
+        if (itrResTax) itrResTax.textContent = formatCurrency(activeResult.totalTax);
+        if (itrResGross) itrResGross.textContent = formatCurrency(activeResult.grossIncome);
+        if (itrResStdDed) itrResStdDed.textContent = formatCurrency(activeResult.stdDed);
+        if (itrResTotalDed) itrResTotalDed.textContent = formatCurrency(activeResult.totalDeductions);
+        if (itrResTaxable) itrResTaxable.textContent = formatCurrency(activeResult.taxableIncome);
+        if (itrResBaseTax) itrResBaseTax.textContent = formatCurrency(activeResult.baseTax);
+        if (itrResRebate) itrResRebate.textContent = formatCurrency(activeResult.rebate);
+        if (itrResCess) itrResCess.textContent = formatCurrency(activeResult.cess);
+        if (itrResTakehome) itrResTakehome.textContent = formatCurrency(activeResult.monthlyTakeHome);
+
+        if (itrSalaryBadge) itrSalaryBadge.textContent = formatCurrency(salary).split('.')[0];
+        if (itrOtherBadge) itrOtherBadge.textContent = formatCurrency(other).split('.')[0];
+
+        // Comparison recommendation banner
+        if (itrRegimeRecommendation) {
+            const taxDiff = Math.abs(newRegimeResult.totalTax - oldRegimeResult.totalTax);
+            if (newRegimeResult.totalTax < oldRegimeResult.totalTax) {
+                itrRegimeRecommendation.innerHTML = `🎉 <strong>New Tax Regime</strong> saves you <strong>${formatCurrency(taxDiff)}</strong> more tax!`;
+            } else if (oldRegimeResult.totalTax < newRegimeResult.totalTax) {
+                itrRegimeRecommendation.innerHTML = `📜 <strong>Old Tax Regime</strong> saves you <strong>${formatCurrency(taxDiff)}</strong> more tax!`;
+            } else {
+                itrRegimeRecommendation.innerHTML = `⚖️ Both Tax Regimes result in the <strong>same tax liability (${formatCurrency(newRegimeResult.totalTax)})</strong>.`;
+            }
+        }
+
+        // Update Chart
+        if (window.itrChart && window.itrChart.data) {
+            const takeHomeAnnual = activeResult.grossIncome - activeResult.totalTax;
+            window.itrChart.data.datasets[0].data = [
+                Math.max(0, takeHomeAnnual),
+                Math.max(0, activeResult.totalTax),
+                Math.max(0, activeResult.totalDeductions)
+            ];
+            window.itrChart.update();
+        }
+    }
+
+    // Regime Toggle Chip Listeners
+    if (itrRegimeNewBtn && itrRegimeOldBtn) {
+        itrRegimeNewBtn.addEventListener('click', () => {
+            currentTaxRegime = 'new';
+            itrRegimeNewBtn.classList.add('active');
+            itrRegimeOldBtn.classList.remove('active');
+            if (itrDeductionsContainer) itrDeductionsContainer.style.display = 'none';
+            calculateITR();
+        });
+
+        itrRegimeOldBtn.addEventListener('click', () => {
+            currentTaxRegime = 'old';
+            itrRegimeOldBtn.classList.add('active');
+            itrRegimeNewBtn.classList.remove('active');
+            if (itrDeductionsContainer) itrDeductionsContainer.style.display = 'block';
+            calculateITR();
+        });
+    }
+
+    // Input Event Listeners
+    if (itrSalaryInput && itrSalarySlider) {
+        itrSalaryInput.addEventListener('input', () => {
+            itrSalarySlider.value = itrSalaryInput.value;
+            calculateITR();
+        });
+        itrSalarySlider.addEventListener('input', () => {
+            itrSalaryInput.value = itrSalarySlider.value;
+            calculateITR();
+        });
+    }
+
+    if (itrOtherInput) itrOtherInput.addEventListener('input', calculateITR);
+    if (itrAySelect) itrAySelect.addEventListener('change', calculateITR);
+    if (itrAgeSelect) itrAgeSelect.addEventListener('change', calculateITR);
+    if (itr80cInput) itr80cInput.addEventListener('input', calculateITR);
+    if (itr80dInput) itr80dInput.addEventListener('input', calculateITR);
+    if (itrHraInput) itrHraInput.addEventListener('input', calculateITR);
+    if (itrNpsInput) itrNpsInput.addEventListener('input', calculateITR);
+
+    if (itrCalculateBtn) itrCalculateBtn.addEventListener('click', calculateITR);
+
+    if (itrResetBtn) {
+        itrResetBtn.addEventListener('click', () => {
+            if (itrSalaryInput) itrSalaryInput.value = 1200000;
+            if (itrSalarySlider) itrSalarySlider.value = 1200000;
+            if (itrOtherInput) itrOtherInput.value = 50000;
+            if (itr80cInput) itr80cInput.value = 150000;
+            if (itr80dInput) itr80dInput.value = 25000;
+            if (itrHraInput) itrHraInput.value = 100000;
+            if (itrNpsInput) itrNpsInput.value = 50000;
+            currentTaxRegime = 'new';
+            if (itrRegimeNewBtn) itrRegimeNewBtn.classList.add('active');
+            if (itrRegimeOldBtn) itrRegimeOldBtn.classList.remove('active');
+            if (itrDeductionsContainer) itrDeductionsContainer.style.display = 'none';
+            calculateITR();
+        });
+    }
+
+    if (itrCopyBtn) {
+        itrCopyBtn.addEventListener('click', () => {
+            const summary = `📄 Hisab ITR & Income Tax Summary:\n` +
+                `• Gross Income: ${itrResGross ? itrResGross.textContent : ''}\n` +
+                `• Tax Regime: ${currentTaxRegime.toUpperCase()}\n` +
+                `• Net Taxable Income: ${itrResTaxable ? itrResTaxable.textContent : ''}\n` +
+                `• Total Tax Liability: ${itrResTax ? itrResTax.textContent : ''}\n` +
+                `• Monthly Take-Home: ${itrResTakehome ? itrResTakehome.textContent : ''}`;
+            copyToClipboard(summary);
+        });
+    }
+
+    /* --------------------------------------------------------------------------
+       9. Initial Application Run
        -------------------------------------------------------------------------- */
     calculateGST();
     initEMIChart();
@@ -1314,6 +1594,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initRDChart();
     calculateRD();
     calculateGratuity();
+    initITRChart();
+    calculateITR();
     updateCurrencyState();
 
 });
