@@ -146,7 +146,6 @@ elif calc_option == "💰 EMI Calculator":
         mcol1.metric("Principal Amount", format_inr(principal))
         mcol2.metric("Total Interest Payable", format_inr(total_interest))
         
-        # Donut Chart
         fig = go.Figure(data=[go.Pie(
             labels=['Principal Amount', 'Total Interest'],
             values=[principal, max(0, total_interest)],
@@ -155,6 +154,32 @@ elif calc_option == "💰 EMI Calculator":
         )])
         fig.update_layout(margin=dict(t=20, b=20, l=20, r=20), height=220)
         st.plotly_chart(fig, use_container_width=True)
+
+    # Monthly Repayment Amortization Schedule Table
+    sched_data = []
+    bal = principal
+    for m in range(1, N + 1):
+        opening = bal
+        int_paid = bal * R if R > 0 else 0
+        prin_paid = emi - int_paid
+        if m == N or bal < prin_paid:
+            prin_paid = bal
+            int_paid = max(0, emi - prin_paid)
+            bal = 0.0
+        else:
+            bal -= prin_paid
+        sched_data.append({
+            "Period": f"Month {m}",
+            "Opening Balance": format_inr(opening),
+            "EMI Payment": format_inr(emi),
+            "Principal Paid": format_inr(prin_paid),
+            "Interest Paid": format_inr(int_paid),
+            "Closing Balance": format_inr(bal)
+        })
+
+    st.markdown("---")
+    with st.expander("📅 View Monthly Repayment Amortization Schedule Table", expanded=False):
+        st.dataframe(sched_data, use_container_width=True)
 
 
 # ------------------------------------------------------------------------------

@@ -295,6 +295,40 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- EMI Monthly & Yearly Repayment Schedule Card -->
+                    <div class="card schedule-card" style="margin-top: 1.75rem;">
+                        <div class="card-header">
+                            <div>
+                                <h2>📅 Repayment Amortization Schedule</h2>
+                                <p class="card-sub-title">Month-by-month principal, interest, and remaining balance breakdown</p>
+                            </div>
+                            <div class="schedule-controls">
+                                <div class="unit-toggle">
+                                    <button type="button" class="unit-btn active" id="emi-sched-monthly">Monthly</button>
+                                    <button type="button" class="unit-btn" id="emi-sched-yearly">Yearly</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th>Period</th>
+                                        <th>Opening Balance</th>
+                                        <th>EMI Payment</th>
+                                        <th>Principal Paid</th>
+                                        <th>Interest Paid</th>
+                                        <th>Closing Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="emi-schedule-tbody">
+                                    <!-- Dynamic rows inserted by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </section>
 
 
