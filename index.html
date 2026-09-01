@@ -196,6 +196,18 @@
                 </div>
             </header>
 
+            <!-- Official Printable Bill / PDF Statement Header (Visible only when printing) -->
+            <div class="print-bill-header">
+                <div class="print-logo">
+                    <h2>⚡ Hisab Calculator</h2>
+                    <p>Official Financial Statement & Tax Calculation Summary</p>
+                </div>
+                <div class="print-meta">
+                    <p><strong>Date & Time:</strong> <span id="print-timestamp"></span></p>
+                    <p><strong>Website:</strong> hisab-calculator.vercel.app</p>
+                </div>
+            </div>
+
             <!-- Calculator Views Container -->
             <main class="content-body">
 
@@ -256,7 +268,10 @@
                         <div class="card result-card">
                             <div class="card-header">
                                 <h2>Calculation Breakdown</h2>
-                                <button class="copy-btn" id="gst-copy" title="Copy summary">📋 Copy</button>
+                                <div class="card-actions">
+                                    <button class="copy-btn" id="gst-copy" title="Copy summary">📋 Copy</button>
+                                    <button class="print-btn" id="gst-print" title="Print / Save PDF Invoice">🖨️ Print PDF</button>
+                                </div>
                             </div>
 
                             <div class="result-highlight">
@@ -353,7 +368,10 @@
                         <div class="card result-card">
                             <div class="card-header">
                                 <h2>Payment Summary</h2>
-                                <button class="copy-btn" id="emi-copy" title="Copy summary">📋 Copy</button>
+                                <div class="card-actions">
+                                    <button class="copy-btn" id="emi-copy" title="Copy summary">📋 Copy</button>
+                                    <button class="print-btn" id="emi-print" title="Print / Save PDF Bill">🖨️ Print PDF</button>
+                                </div>
                             </div>
 
                             <div class="result-highlight emi-highlight">
@@ -496,7 +514,10 @@
                         <div class="card result-card">
                             <div class="card-header">
                                 <h2>FD Maturity Summary</h2>
-                                <button class="copy-btn" id="fd-copy" title="Copy summary">📋 Copy</button>
+                                <div class="card-actions">
+                                    <button class="copy-btn" id="fd-copy" title="Copy summary">📋 Copy</button>
+                                    <button class="print-btn" id="fd-print" title="Print / Save PDF Bill">🖨️ Print PDF</button>
+                                </div>
                             </div>
 
                             <div class="result-highlight fd-highlight">
@@ -607,7 +628,10 @@
                         <div class="card result-card">
                             <div class="card-header">
                                 <h2>Wealth Projection Summary</h2>
-                                <button class="copy-btn" id="sip-copy" title="Copy summary">📋 Copy</button>
+                                <div class="card-actions">
+                                    <button class="copy-btn" id="sip-copy" title="Copy summary">📋 Copy</button>
+                                    <button class="print-btn" id="sip-print" title="Print / Save PDF Bill">🖨️ Print PDF</button>
+                                </div>
                             </div>
 
                             <div class="result-highlight sip-highlight">
@@ -716,7 +740,10 @@
                         <div class="card result-card">
                             <div class="card-header">
                                 <h2>RD Maturity Summary</h2>
-                                <button class="copy-btn" id="rd-copy" title="Copy summary">📋 Copy</button>
+                                <div class="card-actions">
+                                    <button class="copy-btn" id="rd-copy" title="Copy summary">📋 Copy</button>
+                                    <button class="print-btn" id="rd-print" title="Print / Save PDF Bill">🖨️ Print PDF</button>
+                                </div>
                             </div>
 
                             <div class="result-highlight rd-highlight">
@@ -808,7 +835,10 @@
                         <div class="card result-card">
                             <div class="card-header">
                                 <h2>Gratuity Summary</h2>
-                                <button class="copy-btn" id="gratuity-copy" title="Copy summary">📋 Copy</button>
+                                <div class="card-actions">
+                                    <button class="copy-btn" id="gratuity-copy" title="Copy summary">📋 Copy</button>
+                                    <button class="print-btn" id="gratuity-print" title="Print / Save PDF Bill">🖨️ Print PDF</button>
+                                </div>
                             </div>
 
                             <div class="result-highlight gratuity-highlight">
@@ -933,7 +963,10 @@
                         <div class="card result-card">
                             <div class="card-header">
                                 <h2>ITR Tax Liability Summary</h2>
-                                <button class="copy-btn" id="itr-copy" title="Copy summary">📋 Copy</button>
+                                <div class="card-actions">
+                                    <button class="copy-btn" id="itr-copy" title="Copy summary">📋 Copy</button>
+                                    <button class="print-btn" id="itr-print" title="Print / Save PDF Bill">🖨️ Print PDF</button>
+                                </div>
                             </div>
 
                             <!-- Regime Comparison Banner -->

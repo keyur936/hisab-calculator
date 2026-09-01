@@ -388,6 +388,12 @@ body {
     color: var(--text-main);
 }
 
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .reset-btn, .copy-btn {
     display: flex;
     align-items: center;
@@ -403,10 +409,32 @@ body {
     transition: all var(--transition-fast);
 }
 
+.print-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: var(--primary-light);
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
 .reset-btn:hover, .copy-btn:hover {
     background-color: var(--primary-light);
     color: var(--primary);
     border-color: var(--primary);
+}
+
+.print-btn:hover {
+    background-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+    transform: translateY(-1px);
 }
 
 /* Form Groups */
@@ -1332,4 +1360,97 @@ kbd {
 
 .calculate-btn:active {
     transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   Printable Official Bill & Invoice PDF Stylesheet (@media print)
+   -------------------------------------------------------------------------- */
+.print-bill-header {
+    display: none;
+}
+
+@media print {
+    body {
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 12pt;
+    }
+
+    .sidebar,
+    .mobile-header,
+    .card-actions,
+    .reset-btn,
+    .calculate-btn,
+    .primary-btn,
+    .calc-keypad,
+    .range-slider,
+    .form-range,
+    button,
+    nav,
+    .toast {
+        display: none !important;
+    }
+
+    .app-container {
+        display: block !important;
+    }
+
+    .content-body {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .calculator-panel {
+        display: none !important;
+    }
+
+    .calculator-panel.active {
+        display: block !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .calc-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+        background-color: #ffffff !important;
+        break-inside: avoid;
+    }
+
+    .print-bill-header {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #4f46e5;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .print-logo h2 {
+        color: #4f46e5;
+        font-size: 1.6rem;
+        margin: 0 0 0.25rem 0;
+        font-weight: 800;
+    }
+
+    .print-logo p {
+        color: #64748b;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    .print-meta {
+        text-align: right;
+        font-size: 0.85rem;
+        color: #475569;
+    }
+
+    .print-meta p {
+        margin: 0 0 0.25rem 0;
+    }
 }

@@ -1582,6 +1582,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* --------------------------------------------------------------------------
+       Print PDF / Invoice Event Handler
+       -------------------------------------------------------------------------- */
+    const printBtns = document.querySelectorAll('.print-btn');
+    const printTimestampEl = document.getElementById('print-timestamp');
+
+    printBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (printTimestampEl) {
+                const now = new Date();
+                printTimestampEl.textContent = now.toLocaleString('en-IN', {
+                    dateStyle: 'medium',
+                    timeStyle: 'short'
+                });
+            }
+            window.print();
+        });
+    });
+
+    /* --------------------------------------------------------------------------
        9. Initial Application Run
        -------------------------------------------------------------------------- */
     calculateGST();
