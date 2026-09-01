@@ -87,6 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
         normal: {
             title: 'Normal Calculator',
             subtitle: 'Standard math calculator for basic calculations'
+        },
+        faq: {
+            title: 'Financial Guide & FAQ',
+            subtitle: 'Comprehensive financial guides, calculation formulas, and frequently asked questions'
         }
     };
 

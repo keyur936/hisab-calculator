@@ -150,6 +150,13 @@
                     <span class="nav-icon">🔢</span>
                     <span class="nav-label">Normal Calculator</span>
                 </button>
+
+                <div class="nav-group-title" style="margin-top: 1.25rem;">HELP & GUIDE</div>
+
+                <button class="nav-item" data-tab="faq" id="nav-faq">
+                    <span class="nav-icon">📚</span>
+                    <span class="nav-label">FAQ & Guide</span>
+                </button>
             </nav>
 
             <div class="sidebar-footer">
@@ -882,32 +889,49 @@
                     </div>
                 </section>
 
-                <!-- SEO Knowledge Base & FAQ Guide Card -->
-                <section class="card seo-content-card" style="margin-top: 2rem;">
-                    <h2>📚 Financial Guide & Frequently Asked Questions (FAQ)</h2>
-                    <p class="card-sub-title">Learn how to use Hisab Financial Calculators for smart money management</p>
 
-                    <div class="seo-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.25rem;">
-                        <article class="seo-block">
-                            <h3>🧾 How to Calculate GST Online?</h3>
-                            <p><strong>Exclusive GST (Add GST):</strong> Tax is added to base price. Formula: <code>GST = Amount × Rate / 100</code>.</p>
-                            <p><strong>Inclusive GST (Remove GST):</strong> Base price is extracted from total. Formula: <code>Base = Amount / (1 + Rate / 100)</code>.</p>
-                        </article>
+                <!-- 8. FAQ & FINANCIAL GUIDE PANEL -->
+                <section class="calculator-panel" id="panel-faq">
+                    <div class="card faq-panel-card">
+                        <div class="card-header">
+                            <div>
+                                <h2>📚 Financial Guide & Frequently Asked Questions (FAQ)</h2>
+                                <p class="card-sub-title">Learn formulas, calculation methods, and financial planning tips</p>
+                            </div>
+                        </div>
 
-                        <article class="seo-block">
-                            <h3>💰 How is Loan EMI Calculated?</h3>
-                            <p>Equated Monthly Installment (EMI) uses formula: <code>EMI = P × R × (1+R)^N / ((1+R)^N - 1)</code> where P is principal loan amount, R is monthly interest rate, and N is tenure in months.</p>
-                        </article>
+                        <div class="faq-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.25rem;">
+                            <article class="seo-block">
+                                <h3>🧾 How to Calculate GST Online?</h3>
+                                <p><strong>Exclusive GST (Add GST):</strong> Tax is added on top of net base price. Formula: <code>GST = Amount × Rate / 100</code>.</p>
+                                <p><strong>Inclusive GST (Remove GST):</strong> Base price is extracted from gross price. Formula: <code>Base = Amount / (1 + Rate / 100)</code>.</p>
+                            </article>
 
-                        <article class="seo-block">
-                            <h3>📈 What is Step-Up SIP Calculator?</h3>
-                            <p>SIP allows wealth compounding. Step-up SIP increases monthly contribution by a fixed annual percentage (e.g. 10% per year), boosting long-term portfolio growth.</p>
-                        </article>
+                            <article class="seo-block">
+                                <h3>💰 How is Loan EMI Calculated?</h3>
+                                <p>Equated Monthly Installment (EMI) formula: <code>EMI = P × R × (1+R)^N / ((1+R)^N - 1)</code> where P is Principal loan amount, R is monthly interest rate, and N is loan tenure in months.</p>
+                            </article>
 
-                        <article class="seo-block">
-                            <h3>💼 Gratuity Calculation Rules (India)</h3>
-                            <p>Gratuity is paid to employees completing at least 5 years continuous service. Formula: <code>Gratuity = (Basic + DA) × 15 × Years / 26</code>. Exempt up to ₹20 Lakhs.</p>
-                        </article>
+                            <article class="seo-block">
+                                <h3>📈 What is Step-Up SIP Calculator?</h3>
+                                <p>Systematic Investment Plan (SIP) allows wealth compounding. Step-up SIP automatically increases your monthly investment percentage (e.g. 10% annual increase) every year, maximizing overall portfolio returns.</p>
+                            </article>
+
+                            <article class="seo-block">
+                                <h3>🏦 Fixed Deposit (FD) Compounding Rules</h3>
+                                <p>Fixed Deposit interest compounds quarterly in Indian banks. Formula: <code>A = P × (1 + R / (N × 100))^(N × T)</code> where A is maturity amount, P is principal, N is compounding frequency, and T is tenure in years.</p>
+                            </article>
+
+                            <article class="seo-block">
+                                <h3>🔄 Recurring Deposit (RD) Calculation Rules</h3>
+                                <p>Recurring Deposit calculates maturity by compounding each monthly installment till tenure end. Indian banks compound RD quarterly for maximum return accuracy.</p>
+                            </article>
+
+                            <article class="seo-block">
+                                <h3>💼 Payment of Gratuity Act 1972 Rules</h3>
+                                <p>Gratuity is paid to employees completing at least 5 years continuous service. Formula: <code>Gratuity = (Basic + DA) × 15 × Years / 26</code>. Income tax exemption limit is up to ₹20 Lakhs in India.</p>
+                            </article>
+                        </div>
                     </div>
                 </section>
 
