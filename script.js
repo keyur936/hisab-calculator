@@ -50,6 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
     /* --------------------------------------------------------------------------
        2. Application Navigation & Header State
        -------------------------------------------------------------------------- */
+    let emiChart = null;
+    let fdChart = null;
+    let sipChart = null;
+    let rdChart = null;
+
     const navItems = document.querySelectorAll('.nav-item');
     const calcPanels = document.querySelectorAll('.calculator-panel');
     const pageTitle = document.getElementById('pageTitle');
@@ -115,10 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.classList.remove('mobile-open');
 
         // Trigger chart resizes if switching to chart tabs
-        if (tabName === 'emi' && emiChart) emiChart.resize();
-        if (tabName === 'fd' && fdChart) fdChart.resize();
-        if (tabName === 'sip' && sipChart) sipChart.resize();
-        if (tabName === 'rd' && rdChart) rdChart.resize();
+        if (tabName === 'emi' && typeof emiChart !== 'undefined' && emiChart) emiChart.resize();
+        if (tabName === 'fd' && typeof fdChart !== 'undefined' && fdChart) fdChart.resize();
+        if (tabName === 'sip' && typeof sipChart !== 'undefined' && sipChart) sipChart.resize();
+        if (tabName === 'rd' && typeof rdChart !== 'undefined' && rdChart) rdChart.resize();
     };
 
     navItems.forEach(item => {
@@ -171,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currencySelect.value = savedCurrency;
         }
         currencySelect.addEventListener('change', updateCurrencyState);
-        updateCurrencyState();
     }
 
     /* --------------------------------------------------------------------------
@@ -198,16 +202,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentGstRate = 18;
 
-    const calculateGST = () => {
+    function calculateGST() {
+        if (!gstAmountInput) return;
         const amount = parseFloat(gstAmountInput.value);
         const rate = parseFloat(gstCustomRateInput.value) || currentGstRate;
-        const mode = document.querySelector('input[name="gst-mode"]:checked').value;
+        const modeRadio = document.querySelector('input[name="gst-mode"]:checked');
+        const mode = modeRadio ? modeRadio.value : 'add';
 
         if (isNaN(amount) || amount <= 0) {
-            gstAmountError.textContent = 'Please enter a valid positive amount';
+            if (gstAmountError) gstAmountError.textContent = 'Please enter a valid positive amount';
             return;
         } else {
-            gstAmountError.textContent = '';
+            if (gstAmountError) gstAmountError.textContent = '';
         }
 
         let originalAmount = 0;
@@ -219,28 +225,28 @@ document.addEventListener('DOMContentLoaded', () => {
             originalAmount = amount;
             taxAmount = amount * (rate / 100);
             finalAmount = amount + taxAmount;
-            gstExplanation.textContent = `Exclusive Mode: ${rate}% GST (${formatINR(taxAmount)}) is added to the base amount ${formatINR(originalAmount)}.`;
+            if (gstExplanation) gstExplanation.textContent = `Exclusive Mode: ${rate}% GST (${formatCurrency(taxAmount)}) is added to the base amount ${formatCurrency(originalAmount)}.`;
         } else {
             // Inclusive GST: Amount is Total
             finalAmount = amount;
             originalAmount = amount / (1 + (rate / 100));
             taxAmount = amount - originalAmount;
-            gstExplanation.textContent = `Inclusive Mode: Base amount is ${formatINR(originalAmount)} + ${rate}% GST (${formatINR(taxAmount)}) = Total ${formatINR(finalAmount)}.`;
+            if (gstExplanation) gstExplanation.textContent = `Inclusive Mode: Base amount is ${formatCurrency(originalAmount)} + ${rate}% GST (${formatCurrency(taxAmount)}) = Total ${formatCurrency(finalAmount)}.`;
         }
 
         const halfRate = (rate / 2).toFixed(2).replace(/\.00$/, '');
         const cgstAmount = taxAmount / 2;
         const sgstAmount = taxAmount / 2;
 
-        gstResOriginal.textContent = formatINR(originalAmount);
-        gstResCgst.textContent = formatINR(cgstAmount);
-        gstResSgst.textContent = formatINR(sgstAmount);
-        gstResTax.textContent = formatINR(taxAmount);
-        gstResFinal.textContent = formatINR(finalAmount);
+        if (gstResOriginal) gstResOriginal.textContent = formatCurrency(originalAmount);
+        if (gstResCgst) gstResCgst.textContent = formatCurrency(cgstAmount);
+        if (gstResSgst) gstResSgst.textContent = formatCurrency(sgstAmount);
+        if (gstResTax) gstResTax.textContent = formatCurrency(taxAmount);
+        if (gstResFinal) gstResFinal.textContent = formatCurrency(finalAmount);
 
-        gstCgstRate.textContent = halfRate;
-        gstSgstRate.textContent = halfRate;
-    };
+        if (gstCgstRate) gstCgstRate.textContent = halfRate;
+        if (gstSgstRate) gstSgstRate.textContent = halfRate;
+    }
 
     // Rate Chip Click Handlers
     gstChipBtns.forEach(btn => {
@@ -316,9 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emiResPrincipal = document.getElementById('emi-res-principal');
     const emiResInterest = document.getElementById('emi-res-interest');
     const emiResTotal = document.getElementById('emi-res-total');
-
     let emiTenureUnit = 'years';
-    let emiChart = null;
 
     const initEMIChart = () => {
         const ctx = document.getElementById('emiChart').getContext('2d');
@@ -351,7 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const calculateEMI = () => {
+    function calculateEMI() {
+        if (!emiAmountInput || !emiRateInput || !emiTenureInput) return;
         const P = parseFloat(emiAmountInput.value) || 0;
         const annualRate = parseFloat(emiRateInput.value) || 0;
         let tenure = parseFloat(emiTenureInput.value) || 0;
@@ -376,21 +381,21 @@ document.addEventListener('DOMContentLoaded', () => {
             totalInterest = totalAmount - P;
         }
 
-        emiResEmi.textContent = formatINR(emi);
-        emiResPrincipal.textContent = formatINR(P);
-        emiResInterest.textContent = formatINR(totalInterest);
-        emiResTotal.textContent = formatINR(totalAmount);
+        if (emiResEmi) emiResEmi.textContent = formatCurrency(emi);
+        if (emiResPrincipal) emiResPrincipal.textContent = formatCurrency(P);
+        if (emiResInterest) emiResInterest.textContent = formatCurrency(totalInterest);
+        if (emiResTotal) emiResTotal.textContent = formatCurrency(totalAmount);
 
         // Update Slider badges
-        emiAmountBadge.textContent = formatINR(P).split('.')[0];
-        emiRateBadge.textContent = `${annualRate}%`;
+        if (emiAmountBadge) emiAmountBadge.textContent = formatCurrency(P).split('.')[0];
+        if (emiRateBadge) emiRateBadge.textContent = `${annualRate}%`;
 
         // Update Doughnut Chart
-        if (emiChart) {
+        if (emiChart && emiChart.data) {
             emiChart.data.datasets[0].data = [P, Math.max(0, totalInterest)];
             emiChart.update();
         }
-    };
+    }
 
     // Range Sync Helpers
     const bindSyncInputSlider = (inputEl, sliderEl, callback) => {
@@ -480,9 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fdResPrincipal = document.getElementById('fd-res-principal');
     const fdResInterest = document.getElementById('fd-res-interest');
     const fdResTotal = document.getElementById('fd-res-total');
-
     let fdTenureUnit = 'years';
-    let fdChart = null;
 
     const initFDChart = () => {
         const ctx = document.getElementById('fdChart').getContext('2d');
@@ -513,9 +516,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 cutout: '72%'
             }
         });
-    };
+    }
 
-    const calculateFD = () => {
+    function calculateFD() {
+        if (!fdAmountInput || !fdTenureInput) return;
         const P = parseFloat(fdAmountInput.value) || 0;
         const r = parseFloat(fdRateInput.value) || 0;
         const tenure = parseFloat(fdTenureInput.value) || 0;
@@ -530,20 +534,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const maturityValue = P * Math.pow(compoundRate, n * tYears);
         const interestEarned = maturityValue - P;
 
-        fdResMaturity.textContent = formatINR(maturityValue);
-        fdResPrincipal.textContent = formatINR(P);
-        fdResInterest.textContent = formatINR(interestEarned);
-        fdResTotal.textContent = formatINR(maturityValue);
+        if (fdResMaturity) fdResMaturity.textContent = formatCurrency(maturityValue);
+        if (fdResPrincipal) fdResPrincipal.textContent = formatCurrency(P);
+        if (fdResInterest) fdResInterest.textContent = formatCurrency(interestEarned);
+        if (fdResTotal) fdResTotal.textContent = formatCurrency(maturityValue);
 
-        fdAmountBadge.textContent = formatINR(P).split('.')[0];
-        fdRateBadge.textContent = `${r}%`;
+        if (fdAmountBadge) fdAmountBadge.textContent = formatCurrency(P).split('.')[0];
+        if (fdRateBadge) fdRateBadge.textContent = `${r}%`;
 
-        // Update Doughnut Chart
-        if (fdChart) {
+        if (fdChart && fdChart.data) {
             fdChart.data.datasets[0].data = [P, Math.max(0, interestEarned)];
             fdChart.update();
         }
-    };
+    }
 
     bindSyncInputSlider(fdAmountInput, fdAmountSlider, calculateFD);
     bindSyncInputSlider(fdRateInput, fdRateSlider, calculateFD);
@@ -632,8 +635,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sipResReturns = document.getElementById('sip-res-returns');
     const sipResTotal = document.getElementById('sip-res-total');
 
-    let sipChart = null;
-
     const initSIPChart = () => {
         const ctx = document.getElementById('sipChart').getContext('2d');
         sipChart = new Chart(ctx, {
@@ -665,12 +666,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const calculateSIP = () => {
+    function calculateSIP() {
+        if (!sipAmountInput || !sipTenureInput) return;
         const P = parseFloat(sipAmountInput.value) || 0;
         const r = parseFloat(sipRateInput.value) || 0;
         const years = parseFloat(sipTenureInput.value) || 0;
-        const isStepup = sipStepupToggle.checked;
-        const stepupPercent = parseFloat(sipStepupPercentInput.value) || 0;
+        const isStepup = sipStepupToggle ? sipStepupToggle.checked : false;
+        const stepupPercent = sipStepupPercentInput ? (parseFloat(sipStepupPercentInput.value) || 0) : 0;
 
         if (P <= 0 || years <= 0) return;
 
@@ -689,7 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Step-Up SIP Calculation (Compounded Monthly with Annual Step-Up)
             const monthlyRate = r / (12 * 100);
             let currentMonthlyInstallment = P;
-            currentValue = 0;
+            let currentValue = 0;
 
             for (let yr = 1; yr <= years; yr++) {
                 for (let m = 1; m <= 12; m++) {
@@ -702,20 +704,20 @@ document.addEventListener('DOMContentLoaded', () => {
             estimatedReturns = finalValue - totalInvested;
         }
 
-        sipResFinal.textContent = formatINR(finalValue);
-        sipResInvested.textContent = formatINR(totalInvested);
-        sipResReturns.textContent = formatINR(estimatedReturns);
-        sipResTotal.textContent = formatINR(finalValue);
+        if (sipResFinal) sipResFinal.textContent = formatCurrency(finalValue);
+        if (sipResInvested) sipResInvested.textContent = formatCurrency(totalInvested);
+        if (sipResReturns) sipResReturns.textContent = formatCurrency(estimatedReturns);
+        if (sipResTotal) sipResTotal.textContent = formatCurrency(finalValue);
 
-        sipAmountBadge.textContent = formatINR(P).split('.')[0];
-        sipRateBadge.textContent = `${r}%`;
-        sipTenureBadge.textContent = `${years} Years`;
+        if (sipAmountBadge) sipAmountBadge.textContent = formatCurrency(P).split('.')[0];
+        if (sipRateBadge) sipRateBadge.textContent = `${r}%`;
+        if (sipTenureBadge) sipTenureBadge.textContent = `${years} Years`;
 
-        if (sipChart) {
+        if (sipChart && sipChart.data) {
             sipChart.data.datasets[0].data = [totalInvested, Math.max(0, estimatedReturns)];
             sipChart.update();
         }
-    };
+    }
 
     bindSyncInputSlider(sipAmountInput, sipAmountSlider, calculateSIP);
     bindSyncInputSlider(sipRateInput, sipRateSlider, calculateSIP);
@@ -781,9 +783,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const rdResDeposited = document.getElementById('rd-res-deposited');
     const rdResInterest = document.getElementById('rd-res-interest');
     const rdResTotal = document.getElementById('rd-res-total');
-
     let rdTenureUnit = 'months';
-    let rdChart = null;
 
     const initRDChart = () => {
         const ctx = document.getElementById('rdChart').getContext('2d');
@@ -816,7 +816,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const calculateRD = () => {
+    function calculateRD() {
+        if (!rdAmountInput || !rdTenureInput) return;
         const P = parseFloat(rdAmountInput.value) || 0;
         const r = parseFloat(rdRateInput.value) || 0;
         const tenure = parseFloat(rdTenureInput.value) || 0;
@@ -837,19 +838,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalDeposited = P * M;
         const interestEarned = totalMaturity - totalDeposited;
 
-        rdResMaturity.textContent = formatINR(totalMaturity);
-        rdResDeposited.textContent = formatINR(totalDeposited);
-        rdResInterest.textContent = formatINR(interestEarned);
-        rdResTotal.textContent = formatINR(totalMaturity);
+        if (rdResMaturity) rdResMaturity.textContent = formatCurrency(totalMaturity);
+        if (rdResDeposited) rdResDeposited.textContent = formatCurrency(totalDeposited);
+        if (rdResInterest) rdResInterest.textContent = formatCurrency(interestEarned);
+        if (rdResTotal) rdResTotal.textContent = formatCurrency(totalMaturity);
 
-        rdAmountBadge.textContent = formatINR(P).split('.')[0];
-        rdRateBadge.textContent = `${r}%`;
+        if (rdAmountBadge) rdAmountBadge.textContent = formatCurrency(P).split('.')[0];
+        if (rdRateBadge) rdRateBadge.textContent = `${r}%`;
 
-        if (rdChart) {
+        if (rdChart && rdChart.data) {
             rdChart.data.datasets[0].data = [totalDeposited, Math.max(0, interestEarned)];
             rdChart.update();
         }
-    };
+    }
 
     bindSyncInputSlider(rdAmountInput, rdAmountSlider, calculateRD);
     bindSyncInputSlider(rdRateInput, rdRateSlider, calculateRD);
@@ -924,7 +925,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const gratuityResYears = document.getElementById('gratuity-res-years');
     const gratuityInfoText = document.getElementById('gratuity-info-text');
 
-    const calculateGratuity = () => {
+    function calculateGratuity() {
+        if (!gratuityBasicInput || !gratuityYearsInput) return;
         const basic = parseFloat(gratuityBasicInput.value) || 0;
         const da = parseFloat(gratuityDaInput.value) || 0;
         const years = parseFloat(gratuityYearsInput.value) || 0;
@@ -934,19 +936,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Standard Gratuity Formula: (Last Drawn Salary * 15 * Years) / 26
         const gratuityAmount = (lastDrawnSalary * 15 * years) / 26;
 
-        gratuityResBasic.textContent = formatINR(basic);
-        gratuityResDa.textContent = formatINR(da);
-        gratuityResLastSalary.textContent = formatINR(lastDrawnSalary);
-        gratuityResYears.textContent = `${years} Years`;
-        gratuityResAmount.textContent = formatINR(gratuityAmount);
-        gratuityYearsBadge.textContent = `${years} Years`;
+        if (gratuityResBasic) gratuityResBasic.textContent = formatCurrency(basic);
+        if (gratuityResDa) gratuityResDa.textContent = formatCurrency(da);
+        if (gratuityResLastSalary) gratuityResLastSalary.textContent = formatCurrency(lastDrawnSalary);
+        if (gratuityResYears) gratuityResYears.textContent = `${years} Years`;
+        if (gratuityResAmount) gratuityResAmount.textContent = formatCurrency(gratuityAmount);
+        if (gratuityYearsBadge) gratuityYearsBadge.textContent = `${years} Years`;
 
-        if (years < 5) {
-            gratuityInfoText.innerHTML = `⚠️ <strong>Eligibility Notice:</strong> Under the Payment of Gratuity Act 1972, a minimum of 5 years continuous service is mandatory to be eligible for gratuity payout.<br>Formula applied: (${formatINR(lastDrawnSalary)} × 15 × ${years}) ÷ 26.`;
-        } else {
-            gratuityInfoText.innerHTML = `Formula: (Last Drawn Salary × 15 × Years of Service) ÷ 26.<br>Note: Service meets the 5-year eligibility criteria. Tax exemption limit is up to ₹20 Lakhs.`;
+        if (gratuityInfoText) {
+            if (years < 5) {
+                gratuityInfoText.innerHTML = `⚠️ <strong>Eligibility Notice:</strong> Under the Payment of Gratuity Act 1972, a minimum of 5 years continuous service is mandatory to be eligible for gratuity payout.<br>Formula applied: (${formatCurrency(lastDrawnSalary)} × 15 × ${years}) ÷ 26.`;
+            } else {
+                gratuityInfoText.innerHTML = `Formula: (Last Drawn Salary × 15 × Years of Service) ÷ 26.<br>Note: Service meets the 5-year eligibility criteria. Tax exemption limit is up to ₹20 Lakhs.`;
+            }
         }
-    };
+    }
 
     bindSyncInputSlider(gratuityYearsInput, gratuityYearsSlider, calculateGratuity);
     gratuityBasicInput.addEventListener('input', calculateGratuity);
@@ -1186,5 +1190,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initRDChart();
     calculateRD();
     calculateGratuity();
+    updateCurrencyState();
 
 });
