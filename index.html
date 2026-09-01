@@ -3,10 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hisab Calculator – All-in-One Financial Calculator</title>
-    <meta name="description" content="Hisab Calculator - Free All-in-One Financial Dashboard featuring GST, EMI, FD, SIP, RD, Gratuity, and standard math calculators.">
+    <title>Hisab Calculator – Free All-in-One Financial Calculator (GST, EMI, SIP, FD, RD, Gratuity)</title>
+    <meta name="description" content="Hisab Calculator is a free all-in-one financial calculator for GST, Loan EMI with repayment schedule, SIP with step-up, FD, RD, and Gratuity. Fast, accurate & multi-currency.">
+    <meta name="keywords" content="hisab calculator, gst calculator online, emi calculator, sip calculator, fd calculator, rd calculator, gratuity calculator, financial calculator india, loan emi calculator, compound interest calculator">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="author" content="Hisab Calculator">
+    <meta name="language" content="English">
+    <meta name="theme-color" content="#4f46e5">
     <meta name="google-site-verification" content="google38d34ce4f4b04e0f">
     
+    <!-- Canonical Link -->
+    <link rel="canonical" href="https://hisab-calculator.vercel.app/">
+
+    <!-- Open Graph / Facebook / WhatsApp SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Hisab Calculator">
+    <meta property="og:title" content="Hisab Calculator – Free All-in-One Financial Calculator">
+    <meta property="og:description" content="Instant online calculations for GST, Loan EMI Amortization Schedule, Step-up SIP Returns, FD, RD, and Gratuity. 100% free and mobile-friendly.">
+    <meta property="og:url" content="https://hisab-calculator.vercel.app/">
+
+    <!-- Twitter Card SEO -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Hisab Calculator – All-in-One Financial Calculator">
+    <meta name="twitter:description" content="Calculate GST, EMI, SIP, FD, RD, and Gratuity instantly with Hisab Calculator. Interactive graphs and amortization tables included.">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +37,66 @@
     
     <!-- Chart.js for Visual Financial Summaries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Schema.org JSON-LD Structured Data for Google Search Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Hisab Calculator",
+      "url": "https://hisab-calculator.vercel.app/",
+      "description": "Free All-in-One Financial Calculator for GST, Loan EMI with Amortization Schedule, SIP with Step-Up, FD, RD, and Gratuity calculations.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How to calculate GST (Inclusive & Exclusive) using Hisab Calculator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For Exclusive GST (Add GST): Tax Amount = Amount × (GST Rate / 100). For Inclusive GST (Remove GST): Base Amount = Amount / (1 + GST Rate / 100), Tax Amount = Amount - Base Amount."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the formula for Loan EMI Calculation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EMI formula: EMI = P × R × (1 + R)^N / ((1 + R)^N - 1), where P is Loan Principal Amount, R is Monthly Interest Rate (Annual Rate / 12 / 100), and N is Total Months."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Step-up SIP Calculation work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Step-up SIP increases your monthly investment amount by a fixed percentage (e.g. 10%) every year, accelerating wealth creation compared to regular SIP."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is Gratuity calculated in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Under the Payment of Gratuity Act 1972: Gratuity = (Last Drawn Basic Salary + DA) × 15 × Tenure in Years / 26. Minimum 5 years continuous service is required."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
     <div class="app-container">
@@ -799,6 +879,35 @@
                                 <li><kbd>%</kbd> Percentage</li>
                             </ul>
                         </div>
+                    </div>
+                </section>
+
+                <!-- SEO Knowledge Base & FAQ Guide Card -->
+                <section class="card seo-content-card" style="margin-top: 2rem;">
+                    <h2>📚 Financial Guide & Frequently Asked Questions (FAQ)</h2>
+                    <p class="card-sub-title">Learn how to use Hisab Financial Calculators for smart money management</p>
+
+                    <div class="seo-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.25rem;">
+                        <article class="seo-block">
+                            <h3>🧾 How to Calculate GST Online?</h3>
+                            <p><strong>Exclusive GST (Add GST):</strong> Tax is added to base price. Formula: <code>GST = Amount × Rate / 100</code>.</p>
+                            <p><strong>Inclusive GST (Remove GST):</strong> Base price is extracted from total. Formula: <code>Base = Amount / (1 + Rate / 100)</code>.</p>
+                        </article>
+
+                        <article class="seo-block">
+                            <h3>💰 How is Loan EMI Calculated?</h3>
+                            <p>Equated Monthly Installment (EMI) uses formula: <code>EMI = P × R × (1+R)^N / ((1+R)^N - 1)</code> where P is principal loan amount, R is monthly interest rate, and N is tenure in months.</p>
+                        </article>
+
+                        <article class="seo-block">
+                            <h3>📈 What is Step-Up SIP Calculator?</h3>
+                            <p>SIP allows wealth compounding. Step-up SIP increases monthly contribution by a fixed annual percentage (e.g. 10% per year), boosting long-term portfolio growth.</p>
+                        </article>
+
+                        <article class="seo-block">
+                            <h3>💼 Gratuity Calculation Rules (India)</h3>
+                            <p>Gratuity is paid to employees completing at least 5 years continuous service. Formula: <code>Gratuity = (Basic + DA) × 15 × Years / 26</code>. Exempt up to ₹20 Lakhs.</p>
+                        </article>
                     </div>
                 </section>
 

@@ -1211,3 +1211,50 @@ kbd {
     font-weight: 700;
     font-family: var(--font-mono);
 }
+
+/* SEO Content Section Styling */
+.seo-content-card h2 {
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.seo-block {
+    background-color: var(--input-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.seo-block:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.seo-block h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.seo-block p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.seo-block p:last-child {
+    margin-bottom: 0;
+}
+
+.seo-block code {
+    background-color: var(--bg-main);
+    color: var(--primary);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    border: 1px solid var(--card-border);
+}
